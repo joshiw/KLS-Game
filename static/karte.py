@@ -41,14 +41,14 @@ while running:
     # Spielfeld zurücksetzen
     screen.fill(BLACK)
 
-    # Zentrierung des Spielers im sichtbaren Bereich
-    player_draw_pos = [WIDTH // 2 - player_pos[0], HEIGHT // 2 - player_pos[1]]
-
     # Spieler zeichnen
-    pygame.draw.circle(screen, WHITE, (WIDTH // 2, HEIGHT // 2), 20)  # Spielerposition bleibt immer in der Mitte des Bildschirms
+    pygame.draw.circle(screen, WHITE, player_pos, 20)
 
     # Bildschirm aktualisieren
     pygame.display.flip()
+
+    # Bildschirm aktualisieren
+    pygame.display.update()
 
     # Framerate einstellen
     pygame.time.Clock().tick(60)
