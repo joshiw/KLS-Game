@@ -17,7 +17,7 @@ player_speed = 5
 
 # Erstellen des Fensters
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-screen.fill(walküre.jpg)
+spielerfigur = pygame.image.load("static/images/walküre.jpg")
 pygame.display.set_caption("Raumschiff Bewegung")
 
 # Hauptspiel-Schleife
@@ -40,7 +40,9 @@ while running:
         player_pos[1] += player_speed
 
     # Spielfeld zurücksetzen
-    screen.fill()
+    screen.fill((0,0,0))
+
+    screen.blit(spielerfigur,(0,0))
 
     # Spieler zeichnen
     pygame.draw.circle(screen, WHITE, player_pos, 20)
