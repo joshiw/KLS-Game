@@ -12,7 +12,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 # Spielerposition und Geschwindigkeit
-player_pos = [WIDTH // 2, HEIGHT // 2]
+background_pos = [WIDTH // 2, HEIGHT // 2]
 player_speed = 5
 
 # Erstellen des Fensters
@@ -31,21 +31,21 @@ while running:
     # Spielerbewegung
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        player_pos[0] -= player_speed
+        background_pos[0] += player_speed
     if keys[pygame.K_RIGHT]:
-        player_pos[0] += player_speed
+        background_pos[0] -= player_speed
     if keys[pygame.K_UP]:
-        player_pos[1] -= player_speed
+        background_pos[1] += player_speed
     if keys[pygame.K_DOWN]:
-        player_pos[1] += player_speed
+        background_pos[1] -= player_speed
 
     # Spielfeld zurücksetzen
     screen.fill((0,0,0))
 
-    screen.blit(spielerfigur,(0,0))
+    screen.blit(spielerfigur,background_pos)
 
     # Spieler zeichnen
-    pygame.draw.circle(screen, WHITE, player_pos, 20)
+    pygame.draw.circle(screen, WHITE, (400,300), 20)
 
     # Bildschirm aktualisieren
     pygame.display.flip()
