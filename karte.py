@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-# Initialisierung von Pygame
+# Initialisierung von  Pygame
 pygame.init()
 
 # Fenstergröße
