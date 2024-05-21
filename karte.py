@@ -43,3 +43,5 @@ Karte=[
 # Pygame beenden
 pygame.quit()
 sys.exit()
+
+#hallo
