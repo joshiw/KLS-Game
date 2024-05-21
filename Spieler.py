@@ -8,12 +8,11 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 # Pfad zum statischen Ordner
-STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
+STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static', 'images')
 
 # Spielerklasse
-class Player(pygame.sprite.Sprite):
+class Player:
     def __init__(self, x, y, image_path):
-        super().__init__()
         try:
             self.image = pygame.image.load(image_path).convert_alpha()
             self.rect = self.image.get_rect(center=(x, y))
@@ -22,10 +21,41 @@ class Player(pygame.sprite.Sprite):
             self.image = pygame.Surface((50, 50))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
+        self.health = 100
 
     def update(self, dx, dy):
         self.rect.x += dx
         self.rect.y += dy
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+# Boss-Klasse
+class Boss:
+    def __init__(self, x, y, image_path):
+        try:
+            self.original_image = pygame.image.load(image_path).convert_alpha()
+            self.image = pygame.transform.scale(self.original_image, (100, 100))  # Bild skalieren
+            self.rect = self.image.get_rect(center=(x, y))
+        except pygame.error as e:
+            print(f"Fehler beim Laden des Bildes {image_path}: {e}")
+            self.image = pygame.Surface((10, 10))
+            self.image.fill((255, 0, 0))
+            self.rect = self.image.get_rect(center=(x, y))
+        self.health = 300
+
+    def update(self):
+        # Hier könnte die Logik für die Bewegung des Bosses implementiert werden
+        pass
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+    def take_damage(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            self.health = 0  # Verhindert, dass die Gesundheit negativ wird
+            print("Boss besiegt!")
 
 # Hauptspielklasse
 class Game:
@@ -34,10 +64,9 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Among Us 2D")
         self.clock = pygame.time.Clock()
-        self.players = pygame.sprite.Group()
-        self.player1 = Player(200, 200, os.path.join(STATIC_DIR, 'static/images/knight.png'))
-        self.player2 = Player(600, 400, os.path.join(STATIC_DIR, 'static/images/knight.png'))
-        self.players.add(self.player1, self.player2)
+        self.player1 = Player(200, 200, os.path.join(STATIC_DIR, 'knight.png'))
+        self.player2 = Player(600, 400, os.path.join(STATIC_DIR, 'knight.png'))
+        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
 
     def run(self):
         running = True
@@ -73,8 +102,17 @@ class Game:
 
             self.player1.update(player1_dx, player1_dy)
             self.player2.update(player2_dx, player2_dy)
+            self.boss.update()
 
-            self.players.draw(self.screen)
+            # Kollisionserkennung und Schaden
+            if self.player1.rect.colliderect(self.boss.rect):
+                self.boss.take_damage(1) 
+            if self.player2.rect.colliderect(self.boss.rect):
+                self.boss.take_damage(1) 
+
+            self.player1.draw(self.screen)
+            self.player2.draw(self.screen)
+            self.boss.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(60)
 
