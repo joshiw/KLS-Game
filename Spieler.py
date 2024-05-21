@@ -6,6 +6,8 @@ import os
 WIDTH, HEIGHT = 800, 600
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
 # Pfad zum statischen Ordner
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static', 'images')
@@ -43,6 +45,7 @@ class Boss:
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
         self.health = 300
+        self.max_health = self.health
 
     def update(self):
         # Hier könnte die Logik für die Bewegung des Bosses implementiert werden
@@ -50,6 +53,16 @@ class Boss:
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        self.draw_health_bar(screen)
+
+    def draw_health_bar(self, screen):
+        health_bar_width = 100
+        health_bar_height = 10
+        fill_width = int(health_bar_width * (self.health / self.max_health))
+        border_rect = pygame.Rect(self.rect.centerx - health_bar_width // 2, self.rect.top - 20, health_bar_width, health_bar_height)
+        fill_rect = pygame.Rect(self.rect.centerx - health_bar_width // 2, self.rect.top - 20, fill_width, health_bar_height)
+        pygame.draw.rect(screen, RED, fill_rect)
+        pygame.draw.rect(screen, WHITE, border_rect, 2)
 
     def take_damage(self, amount):
         self.health -= amount
