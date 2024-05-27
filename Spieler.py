@@ -29,6 +29,11 @@ class Player:
         self.max_health = self.health
         self.alive = True
         self.attacks = []
+        self.damage_texts = []
+        self.ammo = 3
+        self.max_ammo = 3
+        self.last_shot_time = time.time()
+        self.last_ammo_time = time.time()
 
     def update(self, dx, dy):
         if self.alive:
@@ -36,13 +41,20 @@ class Player:
             self.rect.y += dy
             for attack in self.attacks:
                 attack.update()
+            for damage_text in self.damage_texts:
+                damage_text.update()
+            self.damage_texts = [dt for dt in self.damage_texts if not dt.is_expired()]
+            self.replenish_ammo()
 
     def draw(self, screen):
         if self.alive:
             screen.blit(self.image, self.rect)
             self.draw_health_bar(screen)
+            self.draw_ammo_bar(screen)
             for attack in self.attacks:
                 attack.draw(screen)
+            for damage_text in self.damage_texts:
+                damage_text.draw(screen)
 
     def draw_health_bar(self, screen):
         health_bar_width = 50
@@ -53,17 +65,37 @@ class Player:
         pygame.draw.rect(screen, RED, fill_rect)
         pygame.draw.rect(screen, WHITE, border_rect, 1)
 
+    def draw_ammo_bar(self, screen):
+        ammo_bar_width = 50
+        ammo_bar_height = 5
+        fill_width = int(ammo_bar_width * (self.ammo / self.max_ammo))
+        border_rect = pygame.Rect(self.rect.centerx - ammo_bar_width // 2, self.rect.top - 20, ammo_bar_width, ammo_bar_height)
+        fill_rect = pygame.Rect(self.rect.centerx - ammo_bar_width // 2, self.rect.top - 20, fill_width, ammo_bar_height)
+        pygame.draw.rect(screen, GREEN, fill_rect)
+        pygame.draw.rect(screen, WHITE, border_rect, 1)
+
     def take_damage(self, amount):
         self.health -= amount
+        self.damage_texts.append(DamageText(self.rect.centerx, self.rect.top - 20, str(amount)))
         if self.health <= 0:
             self.health = 0
             self.alive = False
             print("Spieler besiegt!")
 
     def attack(self):
-        if self.alive:
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
             new_attack = SoundWave(self.rect.centerx, self.rect.centery)
             self.attacks.append(new_attack)
+
+    def replenish_ammo(self):
+        current_time = time.time()
+        if current_time - self.last_ammo_time >= 2:
+            if self.ammo < self.max_ammo:
+                self.ammo += 1
+            self.last_ammo_time = current_time
 
 # Schallwellenklasse
 class SoundWave:
@@ -106,6 +138,29 @@ class Particle:
     def draw(self, screen):
         pygame.draw.rect(screen, RED, self.rect)
 
+# Schadensanzeige-Klasse
+class DamageText:
+    def __init__(self, x, y, text):
+        self.x = x
+        self.y = y
+        self.text = text
+        self.start_time = time.time()
+        self.duration = 1  # Dauer in Sekunden
+        self.speed = 0.7  # Geschwindigkeit, mit der sich der Text nach oben bewegt
+
+    def update(self):
+        if time.time() - self.start_time < self.duration:
+            self.y -= self.speed
+
+    def draw(self, screen):
+        if time.time() - self.start_time < self.duration:
+            font = pygame.font.SysFont(None, 24)
+            img = font.render(self.text, True, RED)
+            screen.blit(img, (self.x - img.get_width() // 2, self.y))
+
+    def is_expired(self):
+        return time.time() - self.start_time >= self.duration
+
 # Boss-Klasse
 class Boss:
     def __init__(self, x, y, image_path):
@@ -118,12 +173,13 @@ class Boss:
             self.image = pygame.Surface((10, 10))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
-        self.health = 300
+        self.health = 5
         self.max_health = self.health
         self.alive = True
         self.particles = []
         self.last_attack_time = time.time()
         self.speed = 1  # Geschwindigkeit des Bosses
+        self.damage_texts = []
 
     def update(self, players):
         current_time = time.time()
@@ -135,12 +191,15 @@ class Boss:
 
         for particle in self.particles:
             particle.update()
-        
+
         # Entferne Partikel, die außerhalb des Bildschirms sind
         self.particles = [p for p in self.particles if p.rect.x > 0 and p.rect.x < WIDTH and p.rect.y > 0 and p.rect.y < HEIGHT]
 
         if self.alive:
             self.move_towards_nearest_player(players)
+        for damage_text in self.damage_texts:
+            damage_text.update()
+        self.damage_texts = [dt for dt in self.damage_texts if not dt.is_expired()]
 
     def draw(self, screen):
         if self.alive:
@@ -148,6 +207,8 @@ class Boss:
             self.draw_health_bar(screen)
         for particle in self.particles:
             particle.draw(screen)
+        for damage_text in self.damage_texts:
+            damage_text.draw(screen)
 
     def draw_health_bar(self, screen):
         health_bar_width = 100
@@ -160,6 +221,7 @@ class Boss:
 
     def take_damage(self, amount):
         self.health -= amount
+        self.damage_texts.append(DamageText(self.rect.centerx, self.rect.top - 30, str(amount)))
         if self.health <= 0:
             self.health = 0  # Verhindert, dass die Gesundheit negativ wird
             self.alive = False
