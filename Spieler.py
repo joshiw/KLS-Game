@@ -28,16 +28,21 @@ class Player:
         self.health = 5
         self.max_health = self.health
         self.alive = True
+        self.attacks = []
 
     def update(self, dx, dy):
         if self.alive:
             self.rect.x += dx
             self.rect.y += dy
+            for attack in self.attacks:
+                attack.update()
 
     def draw(self, screen):
         if self.alive:
             screen.blit(self.image, self.rect)
             self.draw_health_bar(screen)
+            for attack in self.attacks:
+                attack.draw(screen)
 
     def draw_health_bar(self, screen):
         health_bar_width = 50
@@ -55,11 +60,44 @@ class Player:
             self.alive = False
             print("Spieler besiegt!")
 
+    def attack(self):
+        if self.alive:
+            new_attack = SoundWave(self.rect.centerx, self.rect.centery)
+            self.attacks.append(new_attack)
+
+# Schallwellenklasse
+class SoundWave:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.radius = 10
+        self.max_radius = 100
+        self.speed = 5
+        self.damage = 1
+        self.active = True
+
+    def update(self):
+        if self.active:
+            self.radius += self.speed
+            if self.radius > self.max_radius:
+                self.active = False
+
+    def draw(self, screen):
+        if self.active:
+            pygame.draw.circle(screen, GREEN, (self.x, self.y), self.radius, 2)
+
+    def collide(self, rect):
+        if self.active:
+            distance = math.sqrt((self.x - rect.centerx) ** 2 + (self.y - rect.centery) ** 2)
+            return distance < self.radius + rect.width / 2
+        return False
+
 # Partikelklasse für die Angriffe des Bosses
 class Particle:
-    def __init__(self, x, y, direction):
+    def __init__(self, x, y, direction, damage):
         self.rect = pygame.Rect(x, y, 10, 10)
         self.direction = direction
+        self.damage = damage
 
     def update(self):
         self.rect.x += self.direction[0]
@@ -85,6 +123,7 @@ class Boss:
         self.alive = True
         self.particles = []
         self.last_attack_time = time.time()
+        self.speed = 1  # Geschwindigkeit des Bosses
 
     def update(self, players):
         current_time = time.time()
@@ -99,6 +138,9 @@ class Boss:
         
         # Entferne Partikel, die außerhalb des Bildschirms sind
         self.particles = [p for p in self.particles if p.rect.x > 0 and p.rect.x < WIDTH and p.rect.y > 0 and p.rect.y < HEIGHT]
+
+        if self.alive:
+            self.move_towards_nearest_player(players)
 
     def draw(self, screen):
         if self.alive:
@@ -128,8 +170,32 @@ class Boss:
         direction_y = player.rect.centery - self.rect.centery
         distance = math.sqrt(direction_x**2 + direction_y**2)
         direction = (direction_x / distance * 5, direction_y / distance * 5)  # Geschwindigkeit von 5 Pixel pro Frame
-        particle = Particle(self.rect.centerx, self.rect.centery, direction)
+        damage = max(1, int(10 / (distance / 50)))  # Mehr Schaden bei kürzerer Distanz
+        particle = Particle(self.rect.centerx, self.rect.centery, direction, damage)
         self.particles.append(particle)
+
+    def move_towards_nearest_player(self, players):
+        nearest_player = None
+        min_distance = float('inf')
+
+        for player in players:
+            if player.alive:
+                distance_x = player.rect.centerx - self.rect.centerx
+                distance_y = player.rect.centery - self.rect.centery
+                distance = math.sqrt(distance_x**2 + distance_y**2)
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_player = player
+
+        if nearest_player:
+            direction_x = nearest_player.rect.centerx - self.rect.centerx
+            direction_y = nearest_player.rect.centery - self.rect.centery
+            distance = math.sqrt(direction_x**2 + direction_y**2)
+            if distance > 0:
+                move_x = (direction_x / distance) * self.speed
+                move_y = (direction_y / distance) * self.speed
+                self.rect.x += move_x
+                self.rect.y += move_y
 
 # Hauptspielklasse
 class Game:
@@ -164,6 +230,8 @@ class Game:
                     player1_dy = -5
                 if keys[pygame.K_s]:
                     player1_dy = 5
+                if keys[pygame.K_SPACE]:
+                    self.player1.attack()
 
             # Spieler 2 Steuerung (Pfeiltasten)
             if self.player2.alive:
@@ -190,11 +258,17 @@ class Game:
             # Partikelkollisionen überprüfen und Partikel entfernen
             for particle in self.boss.particles[:]:
                 if self.player1.alive and self.player1.rect.colliderect(particle.rect):
-                    self.player1.take_damage(1)
+                    self.player1.take_damage(particle.damage)
                     self.boss.particles.remove(particle)
                 elif self.player2.alive and self.player2.rect.colliderect(particle.rect):
-                    self.player2.take_damage(1)
+                    self.player2.take_damage(particle.damage)
                     self.boss.particles.remove(particle)
+
+            # Schallwellen-Kollisionen überprüfen und Boss Schaden zufügen
+            for attack in self.player1.attacks[:]:
+                if attack.collide(self.boss.rect):
+                    self.boss.take_damage(1)
+                    attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
 
             self.boss.draw(self.screen)
             self.player1.draw(self.screen)
