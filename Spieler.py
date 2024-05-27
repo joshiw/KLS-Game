@@ -310,12 +310,6 @@ class Game:
             self.player2.update(player2_dx, player2_dy)
             self.boss.update([self.player1, self.player2])
 
-            # Kollisionserkennung und Schaden
-            if self.boss.alive:
-                if self.player1.alive and self.player1.rect.colliderect(self.boss.rect):
-                    self.boss.take_damage(1)
-                if self.player2.alive and self.player2.rect.colliderect(self.boss.rect):
-                    self.boss.take_damage(1)
 
             # Partikelkollisionen überprüfen und Partikel entfernen
             for particle in self.boss.particles[:]:
@@ -330,7 +324,7 @@ class Game:
             for attack in self.player1.attacks[:]:
                 if attack.collide(self.boss.rect):
                     self.boss.take_damage(1)
-                    attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
+                    attack.active = True  # Deaktiviere die Schallwelle nach dem Treffer
 
             self.boss.draw(self.screen)
             self.player1.draw(self.screen)
