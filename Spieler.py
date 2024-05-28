@@ -328,8 +328,9 @@ class Game:
                     player1_dy = -5
                 if keys[pygame.K_s]:
                     player1_dy = 5
-                if keys[pygame.K_SPACE]:
-                    self.player1.attack()
+                if event.type == pygame.constants.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.player1.attack()
 
             # Spieler 2 Steuerung (Pfeiltasten)
             if self.player2.alive:
