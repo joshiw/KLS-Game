@@ -14,9 +14,47 @@ GREEN = (0, 255, 0)
 # Pfad zum statischen Ordner
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static', 'images')
 
-# Spielerklasse
-class Player:
-    def __init__(self, x, y, image_path):
+# Schadensanzeige-Klasse
+class DamageText:
+    def __init__(self, x, y, text):
+        self.x = x
+        self.y = y
+        self.text = text
+        self.start_time = time.time()
+        self.duration = 1  # Dauer in Sekunden
+        self.speed = 0.7  # Geschwindigkeit, mit der sich der Text nach oben bewegt
+
+    def update(self):
+        if time.time() - self.start_time < self.duration:
+            self.y -= self.speed
+
+    def draw(self, screen):
+        if time.time() - self.start_time < self.duration:
+            font = pygame.font.SysFont(None, 24)
+            img = font.render(self.text, True, RED)
+            screen.blit(img, (self.x - img.get_width() // 2, self.y))
+
+    def is_expired(self):
+        return time.time() - self.start_time >= self.duration
+
+# Partikelklasse für die Angriffe des Bosses
+class Particle:
+    def __init__(self, x, y, direction, damage):
+        self.rect = pygame.Rect(x, y, 10, 10)
+        self.direction = direction
+        self.damage = damage
+
+    def update(self):
+        self.rect.x += self.direction[0]
+        self.rect.y += self.direction[1]
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, RED, self.rect)
+
+
+# Basisklasse für Charaktere
+class Character:
+    def __init__(self, x, y, image_path, health, max_ammo):
         try:
             self.image = pygame.image.load(image_path).convert_alpha()
             self.rect = self.image.get_rect(center=(x, y))
@@ -25,13 +63,13 @@ class Player:
             self.image = pygame.Surface((50, 50))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
-        self.health = 5
-        self.max_health = self.health
+        self.health = health
+        self.max_health = health
         self.alive = True
         self.attacks = []
         self.damage_texts = []
-        self.ammo = 3
-        self.max_ammo = 3
+        self.ammo = max_ammo
+        self.max_ammo = max_ammo
         self.last_shot_time = time.time()
         self.last_ammo_time = time.time()
 
@@ -97,7 +135,24 @@ class Player:
                 self.ammo += 1
             self.last_ammo_time = current_time
 
-# Schallwellenklasse
+# Spielerklassen 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# Charakter Hannes
+class Hannes(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Hannes.png'), health=5, max_ammo=3)
+
+# Schallwellenatacke Hannes
 class SoundWave:
     def __init__(self, x, y):
         self.x = x
@@ -124,42 +179,8 @@ class SoundWave:
             return distance < self.radius + rect.width / 2
         return False
 
-# Partikelklasse für die Angriffe des Bosses
-class Particle:
-    def __init__(self, x, y, direction, damage):
-        self.rect = pygame.Rect(x, y, 10, 10)
-        self.direction = direction
-        self.damage = damage
 
-    def update(self):
-        self.rect.x += self.direction[0]
-        self.rect.y += self.direction[1]
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, RED, self.rect)
-
-# Schadensanzeige-Klasse
-class DamageText:
-    def __init__(self, x, y, text):
-        self.x = x
-        self.y = y
-        self.text = text
-        self.start_time = time.time()
-        self.duration = 1  # Dauer in Sekunden
-        self.speed = 0.7  # Geschwindigkeit, mit der sich der Text nach oben bewegt
-
-    def update(self):
-        if time.time() - self.start_time < self.duration:
-            self.y -= self.speed
-
-    def draw(self, screen):
-        if time.time() - self.start_time < self.duration:
-            font = pygame.font.SysFont(None, 24)
-            img = font.render(self.text, True, RED)
-            screen.blit(img, (self.x - img.get_width() // 2, self.y))
-
-    def is_expired(self):
-        return time.time() - self.start_time >= self.duration
 
 # Boss-Klasse
 class Boss:
@@ -173,7 +194,7 @@ class Boss:
             self.image = pygame.Surface((10, 10))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
-        self.health = 5
+        self.health = 10
         self.max_health = self.health
         self.alive = True
         self.particles = []
@@ -266,8 +287,8 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Among Us 2D")
         self.clock = pygame.time.Clock()
-        self.player1 = Player(200, 200, os.path.join(STATIC_DIR, 'Player Hannes.png'))
-        self.player2 = Player(600, 400, os.path.join(STATIC_DIR, 'knight.png'))
+        self.player1 = Hannes(200, 200)  # Verwende die Hannes-Klasse für Spieler 1
+        self.player2 = Hannes(600, 400)  # Beispiel: Zwei Hannes-Charaktere, kann angepasst werden
         self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
 
     def run(self):
@@ -324,7 +345,7 @@ class Game:
             for attack in self.player1.attacks[:]:
                 if attack.collide(self.boss.rect):
                     self.boss.take_damage(1)
-                    attack.active = True  # Deaktiviere die Schallwelle nach dem Treffer
+                    attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
 
             self.boss.draw(self.screen)
             self.player1.draw(self.screen)
