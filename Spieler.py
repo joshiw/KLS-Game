@@ -51,6 +51,19 @@ class Particle:
     def draw(self, screen):
         pygame.draw.rect(screen, RED, self.rect)
 
+# Partikelklasse für LeoG's Angriffe
+class LeoGParticle:
+    def __init__(self, x, y, direction):
+        self.rect = pygame.Rect(x, y, 20, 20)  # Größere Partikel
+        self.direction = direction
+        self.damage = 2  # Mehr Schaden
+
+    def update(self):
+        self.rect.x += self.direction[0]
+        self.rect.y += self.direction[1]
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, GREEN, self.rect)
 
 # Basisklasse für Charaktere
 class Character:
@@ -121,12 +134,7 @@ class Character:
             print("Spieler besiegt!")
 
     def attack(self):
-        current_time = time.time()
-        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
-            self.ammo -= 1
-            self.last_shot_time = current_time
-            new_attack = SoundWave(self.rect.centerx, self.rect.centery)
-            self.attacks.append(new_attack)
+        pass  # Wird in den Unterklassen definiert
 
     def replenish_ammo(self):
         current_time = time.time()
@@ -135,22 +143,18 @@ class Character:
                 self.ammo += 1
             self.last_ammo_time = current_time
 
-# Spielerklassen 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
 # Charakter Hannes
 class Hannes(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Hannes.png'), health=5, max_ammo=3)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            new_attack = SoundWave(self.rect.centerx, self.rect.centery)
+            self.attacks.append(new_attack)
 
 # Schallwellenatacke Hannes
 class SoundWave:
@@ -179,8 +183,19 @@ class SoundWave:
             return distance < self.radius + rect.width / 2
         return False
 
+# Charakter LeoG
+class LeoG(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player LeoG.png'), health=7, max_ammo=3)
 
-
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(0)), math.sin(math.radians(0)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
 
 # Boss-Klasse
 class Boss:
@@ -194,7 +209,7 @@ class Boss:
             self.image = pygame.Surface((10, 10))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
-        self.health = 10
+        self.health = 300
         self.max_health = self.health
         self.alive = True
         self.particles = []
@@ -288,7 +303,7 @@ class Game:
         pygame.display.set_caption("Among Us 2D")
         self.clock = pygame.time.Clock()
         self.player1 = Hannes(200, 200)  # Verwende die Hannes-Klasse für Spieler 1
-        self.player2 = Hannes(600, 400)  # Beispiel: Zwei Hannes-Charaktere, kann angepasst werden
+        self.player2 = LeoG(600, 400)  # Beispiel: LeoG als Spieler 2
         self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
 
     def run(self):
@@ -326,6 +341,8 @@ class Game:
                     player2_dy = -5
                 if keys[pygame.K_DOWN]:
                     player2_dy = 5
+                if keys[pygame.K_RETURN]:  # Enter-Taste für LeoG's Angriff
+                    self.player2.attack()
 
             self.player1.update(player1_dx, player1_dy)
             self.player2.update(player2_dx, player2_dy)
@@ -346,6 +363,12 @@ class Game:
                 if attack.collide(self.boss.rect):
                     self.boss.take_damage(1)
                     attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
+
+            # LeoG's Partikel-Kollisionen überprüfen und Boss Schaden zufügen
+            for attack in self.player2.attacks[:]:
+                if attack.rect.colliderect(self.boss.rect):
+                    self.boss.take_damage(2)  # Mehr Schaden durch LeoG's Partikel
+                    self.player2.attacks.remove(attack)
 
             self.boss.draw(self.screen)
             self.player1.draw(self.screen)
