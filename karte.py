@@ -3,6 +3,7 @@ import sys
 import time
 import random
 
+
 # Initialisierung von Pygame
 pygame.init()
 
@@ -13,7 +14,9 @@ MULTIPLIKATOR = 32
 WIDTH, HEIGHT = 60 * MULTIPLIKATOR, 34 * MULTIPLIKATOR
 
 # Spielfeld erzeugen über Berechnung
-fenster = pygame.display.set_mode((WIDTH, HEIGHT))
+fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+tileset_wall = pygame.image.load('static/images/Texture/TX Tileset Wall.png')
+wall = 
 
 # Titel für Fensterkopf
 pygame.display.set_caption("Breakout in Python")
@@ -77,7 +80,7 @@ def element_zeichnen(spalte, reihe, farbe):
 
 # Spielerposition und Geschwindigkeit
 player_pos = [WIDTH // 2, HEIGHT // 2]
-player_speed = 5
+player_speed = 3
 
 # Laden des Spielerbildes
 spielerfigur = pygame.image.load("static/images/TopG.png")
@@ -92,14 +95,20 @@ while spielaktiv:
 
     # Spielerbewegung
     keys = pygame.key.get_pressed()
+    x = int(player_pos[0]/MULTIPLIKATOR)
+    y = int(player_pos[1]/MULTIPLIKATOR)
     if keys[pygame.K_LEFT]:
-        player_pos[0] -= player_speed
+        if Karte [y+1][x]!=1:
+            player_pos[0] -= player_speed 
     if keys[pygame.K_RIGHT]:
-        player_pos[0] += player_speed
+        if Karte [y+1][x+2]!=1:
+            player_pos[0] += player_speed
     if keys[pygame.K_UP]:
-        player_pos[1] -= player_speed
+        if Karte [y][x+1]!=1:
+            player_pos[1] -= player_speed
     if keys[pygame.K_DOWN]:
-        player_pos[1] += player_speed
+        if Karte [y+2][x+1]!=1:
+            player_pos[1] += player_speed
 
     # Spielfeld zurücksetzen
     fenster.fill(SCHWARZ)
@@ -115,7 +124,17 @@ while spielaktiv:
                 element_zeichnen(x, y, WEISS)
             if Karte[y][x] == 3:
                 element_zeichnen(x, y, DUNKELGRAU)
-                
+
+
+    def handle_collisions():
+        global player_speed
+        x = player_pos[0]
+        y = player_pos[1]
+        if Karte [int(y/MULTIPLIKATOR)][int(x/MULTIPLIKATOR)] == 1:
+            player_pos = y-1
+
+    
+
 
     # Spieler zeichnen
     fenster.blit(spielerfigur, player_pos)
