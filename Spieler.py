@@ -5,7 +5,7 @@ import time
 import math
 
 # Konstanten für das Spiel
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 2000, 600
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -143,6 +143,34 @@ class Character:
                 self.ammo += 1
             self.last_ammo_time = current_time
 
+
+# Schallwellenatacke Hannes
+class SoundWave:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.radius = 10
+        self.max_radius = 100
+        self.speed = 5
+        self.damage = 1
+        self.active = True
+ 
+    def update(self):
+        if self.active:
+            self.radius += self.speed
+            if self.radius > self.max_radius:
+                self.active = False
+ 
+    def draw(self, screen):
+        if self.active:
+            pygame.draw.circle(screen, GREEN, (self.x, self.y), self.radius, 2)
+ 
+    def collide(self, rect):
+        if self.active:
+            distance = math.sqrt((self.x - rect.centerx) ** 2 + (self.y - rect.centery) ** 2)
+            return distance < self.radius + rect.width / 2
+        return False
+
 # Charakter Hannes
 class Hannes(Character):
     def __init__(self, x, y):
@@ -156,33 +184,6 @@ class Hannes(Character):
             new_attack = SoundWave(self.rect.centerx, self.rect.centery)
             self.attacks.append(new_attack)
 
-# Schallwellenatacke Hannes
-class SoundWave:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.radius = 10
-        self.max_radius = 100
-        self.speed = 5
-        self.damage = 1
-        self.active = True
-
-    def update(self):
-        if self.active:
-            self.radius += self.speed
-            if self.radius > self.max_radius:
-                self.active = False
-
-    def draw(self, screen):
-        if self.active:
-            pygame.draw.circle(screen, GREEN, (self.x, self.y), self.radius, 2)
-
-    def collide(self, rect):
-        if self.active:
-            distance = math.sqrt((self.x - rect.centerx) ** 2 + (self.y - rect.centery) ** 2)
-            return distance < self.radius + rect.width / 2
-        return False
-
 # Charakter LeoG
 class LeoG(Character):
     def __init__(self, x, y):
@@ -194,6 +195,62 @@ class LeoG(Character):
             self.ammo -= 1
             self.last_shot_time = current_time
             direction = (math.cos(math.radians(0)), math.sin(math.radians(0)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
+
+# Charakter Arnold
+class Arnold(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Arnold.png'), health=6, max_ammo=4)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(45)), math.sin(math.radians(45)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
+
+# Charakter Alessandro
+class Alessandro(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Alessandro.png'), health=8, max_ammo=2)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(90)), math.sin(math.radians(90)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
+
+# Charakter Joshi
+class Joshi(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Joshi.png'), health=5, max_ammo=5)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(135)), math.sin(math.radians(135)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
+
+# Charakter Kian
+class Kian(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Kian.png'), health=4, max_ammo=6)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(180)), math.sin(math.radians(180)))  # Beispielrichtung, kann angepasst werden
             new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
             self.attacks.append(new_attack)
 
@@ -219,20 +276,21 @@ class Boss:
 
     def update(self, players):
         current_time = time.time()
-        if current_time - self.last_attack_time >= 2:
-            for player in players:
-                if player.alive:
-                    self.fire_particle(player)
-            self.last_attack_time = current_time
-
-        for particle in self.particles:
-            particle.update()
-
-        # Entferne Partikel, die außerhalb des Bildschirms sind
-        self.particles = [p for p in self.particles if p.rect.x > 0 and p.rect.x < WIDTH and p.rect.y > 0 and p.rect.y < HEIGHT]
-
         if self.alive:
+            if current_time - self.last_attack_time >= 2:
+                for player in players:
+                    if player.alive:
+                        self.fire_particle(player)
+                self.last_attack_time = current_time
+
+            for particle in self.particles:
+                particle.update()
+
+            # Entferne Partikel, die außerhalb des Bildschirms sind
+            self.particles = [p for p in self.particles if p.rect.x > 0 and p.rect.x < WIDTH and p.rect.y > 0 and p.rect.y < HEIGHT]
+
             self.move_towards_nearest_player(players)
+
         for damage_text in self.damage_texts:
             damage_text.update()
         self.damage_texts = [dt for dt in self.damage_texts if not dt.is_expired()]
@@ -300,80 +358,107 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Among Us 2D")
+        pygame.display.set_caption("KLS Spiel")
         self.clock = pygame.time.Clock()
-        self.player1 = Hannes(200, 200)  # Verwende die Hannes-Klasse für Spieler 1
-        self.player2 = LeoG(600, 400)  # Beispiel: LeoG als Spieler 2
+        self.character_selected = False
+        self.player = None
         self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
 
+    def character_selection_screen(self):
+        while not self.character_selected:
+            self.screen.fill(BLACK)
+            font = pygame.font.SysFont(None, 55)
+            text = font.render("Wähle deinen Charakter", True, WHITE)
+            self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 4))
+
+            # Lade Bilder für die Charaktere
+            hannes_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Hannes.png')).convert_alpha()
+            leog_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player LeoG.png')).convert_alpha()
+            arnold_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Arnold.png')).convert_alpha()
+            alessandro_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Alessandro.png')).convert_alpha()
+            joshi_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Joshi.png')).convert_alpha()
+            kian_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Kian.png')).convert_alpha()
+
+            # Positioniere die Charaktere auf dem Bildschirm
+            characters = [
+                (hannes_image, "1", Hannes, WIDTH // 7),
+                (leog_image, "2", LeoG, 2 * WIDTH // 7),
+                (arnold_image, "3", Arnold, 3 * WIDTH // 7),
+                (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
+                (joshi_image, "5", Joshi, 5 * WIDTH // 7),
+                (kian_image, "6", Kian, 6 * WIDTH // 7),
+            ]
+
+            for img, number, _, x_pos in characters:
+                rect = img.get_rect(center=(x_pos, HEIGHT // 2))
+                self.screen.blit(img, rect)
+                num_text = font.render(number, True, WHITE)
+                self.screen.blit(num_text, (rect.centerx - num_text.get_width() // 2, rect.bottom + 10))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    for img, _, char_class, x_pos in characters:
+                        rect = img.get_rect(center=(x_pos, HEIGHT // 2))
+                        if rect.collidepoint(event.pos):
+                            self.player = char_class(200, 200)
+                            self.character_selected = True
+                elif event.type == pygame.KEYDOWN:
+                    for _, number, char_class, _ in characters:
+                        if event.key == getattr(pygame, f'K_{number}'):
+                            self.player = char_class(200, 200)
+                            self.character_selected = True
+
     def run(self):
+        self.character_selection_screen()
         running = True
         while running:
+            player_dx, player_dy = 0, 0  # Initialisiere die Variablen hier
             self.screen.fill(BLACK)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
 
+                if event.type == pygame.constants.MOUSEBUTTONDOWN and event.button == 1:
+                    self.player.attack()
+
             keys = pygame.key.get_pressed()
-            player1_dx, player1_dy = 0, 0
-            player2_dx, player2_dy = 0, 0
 
-            # Spieler 1 Steuerung (WASD)
-            if self.player1.alive:
+            # Spieler Steuerung (WASD)
+            if self.player.alive:
                 if keys[pygame.K_a]:
-                    player1_dx = -5
+                    player_dx = -3
                 if keys[pygame.K_d]:
-                    player1_dx = 5
+                    player_dx = 3
                 if keys[pygame.K_w]:
-                    player1_dy = -5
+                    player_dy = -3
                 if keys[pygame.K_s]:
-                    player1_dy = 5
-                if event.type == pygame.constants.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.player1.attack()
+                    player_dy = 3
 
-            # Spieler 2 Steuerung (Pfeiltasten)
-            if self.player2.alive:
-                if keys[pygame.K_LEFT]:
-                    player2_dx = -5
-                if keys[pygame.K_RIGHT]:
-                    player2_dx = 5
-                if keys[pygame.K_UP]:
-                    player2_dy = -5
-                if keys[pygame.K_DOWN]:
-                    player2_dy = 5
-                if keys[pygame.K_RETURN]:  # Enter-Taste für LeoG's Angriff
-                    self.player2.attack()
-
-            self.player1.update(player1_dx, player1_dy)
-            self.player2.update(player2_dx, player2_dy)
-            self.boss.update([self.player1, self.player2])
-
+            self.player.update(player_dx, player_dy)
+            self.boss.update([self.player])
 
             # Partikelkollisionen überprüfen und Partikel entfernen
             for particle in self.boss.particles[:]:
-                if self.player1.alive and self.player1.rect.colliderect(particle.rect):
-                    self.player1.take_damage(particle.damage)
-                    self.boss.particles.remove(particle)
-                elif self.player2.alive and self.player2.rect.colliderect(particle.rect):
-                    self.player2.take_damage(particle.damage)
+                if self.player.alive and self.player.rect.colliderect(particle.rect):
+                    self.player.take_damage(particle.damage)
                     self.boss.particles.remove(particle)
 
             # Schallwellen-Kollisionen überprüfen und Boss Schaden zufügen
-            for attack in self.player1.attacks[:]:
-                if attack.collide(self.boss.rect):
+            for attack in self.player.attacks[:]:
+                if isinstance(attack, SoundWave) and attack.collide(self.boss.rect):
                     self.boss.take_damage(1)
                     attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
-
-            # LeoG's Partikel-Kollisionen überprüfen und Boss Schaden zufügen
-            for attack in self.player2.attacks[:]:
-                if attack.rect.colliderect(self.boss.rect):
+                elif isinstance(attack, LeoGParticle) and attack.rect.colliderect(self.boss.rect):
                     self.boss.take_damage(2)  # Mehr Schaden durch LeoG's Partikel
-                    self.player2.attacks.remove(attack)
+                    self.player.attacks.remove(attack)
 
             self.boss.draw(self.screen)
-            self.player1.draw(self.screen)
-            self.player2.draw(self.screen)
+            self.player.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(60)
 
