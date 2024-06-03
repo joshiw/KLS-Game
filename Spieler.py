@@ -381,12 +381,12 @@ class Game:
 
             # Positioniere die Charaktere auf dem Bildschirm
             characters = [
-                (hannes_image, "1", Hannes, WIDTH // 7),
-                (leog_image, "2", LeoG, 2 * WIDTH // 7),
-                (arnold_image, "3", Arnold, 3 * WIDTH // 7),
-                (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
-                (joshi_image, "5", Joshi, 5 * WIDTH // 7),
-                (kian_image, "6", Kian, 6 * WIDTH // 7),
+                (hannes_image, "1", Hannes, WIDTH // 9),
+                (leog_image, "2", LeoG, 2 * WIDTH // 9),
+                (arnold_image, "3", Arnold, 3 * WIDTH // 9),
+                (alessandro_image, "4", Alessandro, 4 * WIDTH // 9),
+                (joshi_image, "5", Joshi, 5 * WIDTH // 9),
+                (kian_image, "6", Kian, 6 * WIDTH // 9),
             ]
 
             for img, number, _, x_pos in characters:
