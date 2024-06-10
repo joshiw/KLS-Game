@@ -229,6 +229,7 @@ class Arnold(Character):
 
     def attack(self):
         current_time = time.time()
+    
         if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
             self.ammo -= 1
             self.last_shot_time = current_time
@@ -252,7 +253,7 @@ class Alessandro(Character):
 
 # Charakter Joshi
 class Joshi(Character):
-    def __init__(self, x, y):
+    def __init__(x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Joshi.png'), health=5, max_ammo=5)
 
     def attack(self):
@@ -390,8 +391,12 @@ class Game:
         self.player = None
         self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
         self.show_settings = False
-        self.settings_button = pygame.Rect(10, 10, 100, 50)  # Einstellungs-Knopf
+        self.settings_image = pygame.image.load(os.path.join(STATIC_DIR, 'SETTINGS.png')).convert_alpha()
+        self.settings_image = pygame.transform.scale(self.settings_image, (50, 50))
+        self.settings_button = self.settings_image.get_rect(topleft=(10, 10))  # Einstellungs-Knopf
+        self.settings_background = pygame.image.load(os.path.join(STATIC_DIR, 'setting screen.jpg')).convert_alpha()
         self.fullscreen = False
+        self.show_shadows = True
         self.resolutions = [(800, 600), (1280, 720), (1920, 1080), (2000, 600)]
         self.current_resolution_index = self.resolutions.index((WIDTH, HEIGHT))
 
@@ -454,13 +459,18 @@ class Game:
         self.current_resolution_index = (self.current_resolution_index + 1) % len(self.resolutions)
         pygame.display.set_mode(self.resolutions[self.current_resolution_index])
 
+    def toggle_shadows(self):
+        self.show_shadows = not self.show_shadows
+
     def draw_settings_menu(self):
-        pygame.draw.rect(self.screen, WHITE, (WIDTH // 2 - 150, HEIGHT // 2 - 100, 300, 200))
+        self.screen.blit(self.settings_background, (0, 0))
         font = pygame.font.SysFont(None, 45)
         resolution_text = font.render(f"Resolution: {self.resolutions[self.current_resolution_index][0]}x{self.resolutions[self.current_resolution_index][1]}", True, BLACK)
         fullscreen_text = font.render(f"Fullscreen: {'On' if self.fullscreen else 'Off'}", True, BLACK)
+        shadows_text = font.render(f"Shadows: {'On' if self.show_shadows else 'Off'}", True, BLACK)
         self.screen.blit(resolution_text, (WIDTH // 2 - resolution_text.get_width() // 2, HEIGHT // 2 - 60))
         self.screen.blit(fullscreen_text, (WIDTH // 2 - fullscreen_text.get_width() // 2, HEIGHT // 2 + 10))
+        self.screen.blit(shadows_text, (WIDTH // 2 - shadows_text.get_width() // 2, HEIGHT // 2 + 80))
 
     def run(self):
         self.character_selection_screen()
@@ -483,6 +493,8 @@ class Game:
                             self.toggle_fullscreen()
                         elif event.key == pygame.K_r:
                             self.change_resolution()
+                        elif event.key == pygame.K_s:
+                            self.toggle_shadows()
 
             keys = pygame.key.get_pressed()
             # Spieler Steuerung (WASD)
@@ -499,13 +511,13 @@ class Game:
             self.player.update(player_dx, player_dy)
             self.boss.update([self.player])
 
-            # Partikelkollisionen überprüfen und Partikel entfernen
+            # Partikelkollisionen überprüfen and Partikel entfernen
             for particle in self.boss.particles[:]:
                 if self.player.alive and self.player.rect.colliderect(particle.rect):
                     self.player.take_damage(particle.damage)
                     self.boss.particles.remove(particle)
 
-            # Schallwellen-Kollisionen überprüfen und Boss Schaden zufügen
+            # Schallwellen-Kollisionen überprüfen and Boss Schaden zufügen
             for attack in self.player.attacks[:]:
                 if isinstance(attack, SoundWave) and attack.collide(self.boss.rect):
                     self.boss.take_damage(1)
@@ -514,13 +526,14 @@ class Game:
                     self.boss.take_damage(2)  # Mehr Schaden durch LeoG's Partikel
                     self.player.attacks.remove(attack)
 
-            # Zeichne Schatten
-            self.boss.draw_shadow(self.screen)
-            self.player.draw_shadow(self.screen)
-            for attack in self.player.attacks:
-                attack.draw_shadow(self.screen)
-            for particle in self.boss.particles:
-                particle.draw_shadow(self.screen)
+            # Zeichne Schatten, wenn aktiviert
+            if self.show_shadows:
+                self.boss.draw_shadow(self.screen)
+                self.player.draw_shadow(self.screen)
+                for attack in self.player.attacks:
+                    attack.draw_shadow(self.screen)
+                for particle in self.boss.particles:
+                    particle.draw_shadow(self.screen)
 
             # Zeichne Charaktere und Partikel
             self.boss.draw(self.screen)
@@ -531,10 +544,7 @@ class Game:
                 particle.draw(self.screen)
 
             # Zeichne den Einstellungs-Knopf
-            pygame.draw.rect(self.screen, BLACK, self.settings_button)
-            font = pygame.font.SysFont(None, 30)
-            settings_text = font.render("Settings", True, WHITE)
-            self.screen.blit(settings_text, (self.settings_button.x + 10, self.settings_button.y + 10))
+            self.screen.blit(self.settings_image, self.settings_button)
 
             if self.show_settings:
                 self.draw_settings_menu()
