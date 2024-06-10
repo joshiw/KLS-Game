@@ -10,6 +10,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+GRAY = (175, 175, 175)
 
 # Pfad zum statischen Ordner
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static', 'images')
@@ -51,6 +52,12 @@ class Particle:
     def draw(self, screen):
         pygame.draw.rect(screen, RED, self.rect)
 
+    def draw_shadow(self, screen):
+        shadow_rect = self.rect.copy()
+        shadow_rect.x += 5
+        shadow_rect.y += 5
+        pygame.draw.rect(screen, GRAY, shadow_rect)
+
 # Partikelklasse für LeoG's Angriffe
 class LeoGParticle:
     def __init__(self, x, y, direction):
@@ -64,6 +71,12 @@ class LeoGParticle:
 
     def draw(self, screen):
         pygame.draw.rect(screen, GREEN, self.rect)
+
+    def draw_shadow(self, screen):
+        shadow_rect = self.rect.copy()
+        shadow_rect.x += 5
+        shadow_rect.y += 5
+        pygame.draw.rect(screen, GRAY, shadow_rect)
 
 # Basisklasse für Charaktere
 class Character:
@@ -107,6 +120,14 @@ class Character:
             for damage_text in self.damage_texts:
                 damage_text.draw(screen)
 
+    def draw_shadow(self, screen):
+        shadow_rect = self.rect.copy()
+        shadow_rect.x += 5
+        shadow_rect.y += 5
+        shadow_image = self.image.copy()
+        shadow_image.fill(GRAY, special_flags=pygame.BLEND_RGBA_MULT)
+        screen.blit(shadow_image, shadow_rect)
+
     def draw_health_bar(self, screen):
         health_bar_width = 50
         health_bar_height = 5
@@ -143,7 +164,6 @@ class Character:
                 self.ammo += 1
             self.last_ammo_time = current_time
 
-
 # Schallwellenatacke Hannes
 class SoundWave:
     def __init__(self, x, y):
@@ -154,17 +174,21 @@ class SoundWave:
         self.speed = 5
         self.damage = 1
         self.active = True
- 
+
     def update(self):
         if self.active:
             self.radius += self.speed
             if self.radius > self.max_radius:
                 self.active = False
- 
+
     def draw(self, screen):
         if self.active:
             pygame.draw.circle(screen, GREEN, (self.x, self.y), self.radius, 2)
- 
+
+    def draw_shadow(self, screen):
+        if self.active:
+            pygame.draw.circle(screen, GRAY, (self.x + 5, self.y + 5), self.radius, 2)
+
     def collide(self, rect):
         if self.active:
             distance = math.sqrt((self.x - rect.centerx) ** 2 + (self.y - rect.centery) ** 2)
@@ -282,15 +306,11 @@ class Boss:
                     if player.alive:
                         self.fire_particle(player)
                 self.last_attack_time = current_time
-
             for particle in self.particles:
                 particle.update()
-
             # Entferne Partikel, die außerhalb des Bildschirms sind
             self.particles = [p for p in self.particles if p.rect.x > 0 and p.rect.x < WIDTH and p.rect.y > 0 and p.rect.y < HEIGHT]
-
             self.move_towards_nearest_player(players)
-
         for damage_text in self.damage_texts:
             damage_text.update()
         self.damage_texts = [dt for dt in self.damage_texts if not dt.is_expired()]
@@ -303,6 +323,14 @@ class Boss:
             particle.draw(screen)
         for damage_text in self.damage_texts:
             damage_text.draw(screen)
+
+    def draw_shadow(self, screen):
+        shadow_rect = self.rect.copy()
+        shadow_rect.x += 5
+        shadow_rect.y += 5
+        shadow_image = self.image.copy()
+        shadow_image.fill(GRAY, special_flags=pygame.BLEND_RGBA_MULT)
+        screen.blit(shadow_image, shadow_rect)
 
     def draw_health_bar(self, screen):
         health_bar_width = 100
@@ -333,7 +361,6 @@ class Boss:
     def move_towards_nearest_player(self, players):
         nearest_player = None
         min_distance = float('inf')
-
         for player in players:
             if player.alive:
                 distance_x = player.rect.centerx - self.rect.centerx
@@ -342,7 +369,6 @@ class Boss:
                 if distance < min_distance:
                     min_distance = distance
                     nearest_player = player
-
         if nearest_player:
             direction_x = nearest_player.rect.centerx - self.rect.centerx
             direction_y = nearest_player.rect.centery - self.rect.centery
@@ -363,14 +389,18 @@ class Game:
         self.character_selected = False
         self.player = None
         self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
+        self.show_settings = False
+        self.settings_button = pygame.Rect(10, 10, 100, 50)  # Einstellungs-Knopf
+        self.fullscreen = False
+        self.resolutions = [(800, 600), (1280, 720), (1920, 1080), (2000, 600)]
+        self.current_resolution_index = self.resolutions.index((WIDTH, HEIGHT))
 
     def character_selection_screen(self):
         while not self.character_selected:
-            self.screen.fill(BLACK)
+            self.screen.fill(WHITE)
             font = pygame.font.SysFont(None, 55)
-            text = font.render("Wähle deinen Charakter", True, WHITE)
+            text = font.render("Wähle deinen Charakter", True, BLACK)
             self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 4))
-
             # Lade Bilder für die Charaktere
             hannes_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Hannes.png')).convert_alpha()
             leog_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player LeoG.png')).convert_alpha()
@@ -381,18 +411,18 @@ class Game:
 
             # Positioniere die Charaktere auf dem Bildschirm
             characters = [
-                (hannes_image, "1", Hannes, WIDTH // 9),
-                (leog_image, "2", LeoG, 2 * WIDTH // 9),
-                (arnold_image, "3", Arnold, 3 * WIDTH // 9),
-                (alessandro_image, "4", Alessandro, 4 * WIDTH // 9),
-                (joshi_image, "5", Joshi, 5 * WIDTH // 9),
-                (kian_image, "6", Kian, 6 * WIDTH // 9),
+                (hannes_image, "1", Hannes, WIDTH // 7),
+                (leog_image, "2", LeoG, 2 * WIDTH // 7),
+                (arnold_image, "3", Arnold, 3 * WIDTH // 7),
+                (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
+                (joshi_image, "5", Joshi, 5 * WIDTH // 7),
+                (kian_image, "6", Kian, 6 * WIDTH // 7),
             ]
 
             for img, number, _, x_pos in characters:
                 rect = img.get_rect(center=(x_pos, HEIGHT // 2))
                 self.screen.blit(img, rect)
-                num_text = font.render(number, True, WHITE)
+                num_text = font.render(number, True, BLACK)
                 self.screen.blit(num_text, (rect.centerx - num_text.get_width() // 2, rect.bottom + 10))
 
             pygame.display.flip()
@@ -413,21 +443,48 @@ class Game:
                             self.player = char_class(200, 200)
                             self.character_selected = True
 
+    def toggle_fullscreen(self):
+        self.fullscreen = not self.fullscreen
+        if self.fullscreen:
+            self.screen = pygame.display.set_mode(self.resolutions[self.current_resolution_index], pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode(self.resolutions[self.current_resolution_index])
+
+    def change_resolution(self):
+        self.current_resolution_index = (self.current_resolution_index + 1) % len(self.resolutions)
+        pygame.display.set_mode(self.resolutions[self.current_resolution_index])
+
+    def draw_settings_menu(self):
+        pygame.draw.rect(self.screen, WHITE, (WIDTH // 2 - 150, HEIGHT // 2 - 100, 300, 200))
+        font = pygame.font.SysFont(None, 45)
+        resolution_text = font.render(f"Resolution: {self.resolutions[self.current_resolution_index][0]}x{self.resolutions[self.current_resolution_index][1]}", True, BLACK)
+        fullscreen_text = font.render(f"Fullscreen: {'On' if self.fullscreen else 'Off'}", True, BLACK)
+        self.screen.blit(resolution_text, (WIDTH // 2 - resolution_text.get_width() // 2, HEIGHT // 2 - 60))
+        self.screen.blit(fullscreen_text, (WIDTH // 2 - fullscreen_text.get_width() // 2, HEIGHT // 2 + 10))
+
     def run(self):
         self.character_selection_screen()
         running = True
         while running:
             player_dx, player_dy = 0, 0  # Initialisiere die Variablen hier
-            self.screen.fill(BLACK)
+            self.screen.fill(WHITE)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-
-                if event.type == pygame.constants.MOUSEBUTTONDOWN and event.button == 1:
-                    self.player.attack()
+                if event.type == pygame.constants.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if self.settings_button.collidepoint(event.pos):
+                            self.show_settings = not self.show_settings
+                        else:
+                            self.player.attack()
+                if event.type == pygame.KEYDOWN:
+                    if self.show_settings:
+                        if event.key == pygame.K_f:
+                            self.toggle_fullscreen()
+                        elif event.key == pygame.K_r:
+                            self.change_resolution()
 
             keys = pygame.key.get_pressed()
-
             # Spieler Steuerung (WASD)
             if self.player.alive:
                 if keys[pygame.K_a]:
@@ -457,8 +514,31 @@ class Game:
                     self.boss.take_damage(2)  # Mehr Schaden durch LeoG's Partikel
                     self.player.attacks.remove(attack)
 
+            # Zeichne Schatten
+            self.boss.draw_shadow(self.screen)
+            self.player.draw_shadow(self.screen)
+            for attack in self.player.attacks:
+                attack.draw_shadow(self.screen)
+            for particle in self.boss.particles:
+                particle.draw_shadow(self.screen)
+
+            # Zeichne Charaktere und Partikel
             self.boss.draw(self.screen)
             self.player.draw(self.screen)
+            for attack in self.player.attacks:
+                attack.draw(self.screen)
+            for particle in self.boss.particles:
+                particle.draw(self.screen)
+
+            # Zeichne den Einstellungs-Knopf
+            pygame.draw.rect(self.screen, BLACK, self.settings_button)
+            font = pygame.font.SysFont(None, 30)
+            settings_text = font.render("Settings", True, WHITE)
+            self.screen.blit(settings_text, (self.settings_button.x + 10, self.settings_button.y + 10))
+
+            if self.show_settings:
+                self.draw_settings_menu()
+
             pygame.display.flip()
             self.clock.tick(60)
 
