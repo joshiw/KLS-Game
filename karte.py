@@ -15,8 +15,10 @@ WIDTH, HEIGHT = 60 * MULTIPLIKATOR, 34 * MULTIPLIKATOR
 
 # Spielfeld erzeugen über Berechnung
 fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-tileset_wall = pygame.image.load('static/images/Texture/TX Tileset Wall.png')
-wall = 
+tileset_wall = pygame.image.load('static/images/Texture/TX Tileset Stones.png')
+wall = tileset_wall.subsurface([64,64,32,32])
+tileset_floor = pygame.image.load('static/images/Texture/TX Props.png')
+floor = tileset_floor.subsurface([32,32,32,32])
 
 # Titel für Fensterkopf
 pygame.display.set_caption("Breakout in Python")
@@ -74,13 +76,13 @@ def kor(zahl):
     return zahl * MULTIPLIKATOR
 
 # Spielelement zeichnen
-def element_zeichnen(spalte, reihe, farbe):
-    pygame.draw.rect(fenster, farbe, [kor(spalte) + 1, kor(reihe) + 1, kor(1) - 1, kor(1) - 1])
-
+def element_zeichnen(spalte, reihe, art):
+    #pygame.draw.rect(fenster, farbe, [kor(spalte) + 1, kor(reihe) + 1, kor(1) - 1, kor(1) - 1])
+    fenster.blit(art, [kor(spalte) + 1, kor(reihe) + 1, kor(1) - 1, kor(1) - 1])
 
 # Spielerposition und Geschwindigkeit
 player_pos = [WIDTH // 2, HEIGHT // 2]
-player_speed = 3
+player_speed = 5
 
 # Laden des Spielerbildes
 spielerfigur = pygame.image.load("static/images/TopG.png")
@@ -117,13 +119,13 @@ while spielaktiv:
     for x in range(62):
         for y in range(33):
             if Karte[y][x] == 0:
-                element_zeichnen(x, y, GRAU)
+                element_zeichnen(x, y, floor)
             if Karte[y][x] == 1:
-                element_zeichnen(x, y, SCHWARZ)
+                element_zeichnen(x, y, wall)
             if Karte[y][x] == 2:
-                element_zeichnen(x, y, WEISS)
+                element_zeichnen(x, y, floor)
             if Karte[y][x] == 3:
-                element_zeichnen(x, y, DUNKELGRAU)
+                element_zeichnen(x, y, floor)
 
 
     def handle_collisions():
@@ -134,8 +136,6 @@ while spielaktiv:
             player_pos = y-1
 
     
-
-
     # Spieler zeichnen
     fenster.blit(spielerfigur, player_pos)
 
