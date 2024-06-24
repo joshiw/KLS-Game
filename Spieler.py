@@ -3,7 +3,7 @@ import sys
 import os
 import time
 import math
-
+pygame.init()
 # Konstanten für das Spiel
 WIDTH, HEIGHT = 2000, 600
 WHITE = (255, 255, 255)
@@ -14,6 +14,15 @@ GRAY = (175, 175, 175)
 
 # Pfad zum statischen Ordner
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static', 'images')
+
+images = [
+    pygame.image.load('arnold_walk0.png'),
+    pygame.image.load('arnold_walk1.png'),
+    pygame.image.load('arnold_walk2.png')
+]
+current_image_index = 0
+
+
 
 # Schadensanzeige-Klasse
 class DamageText:
@@ -380,6 +389,24 @@ class Boss:
                 self.rect.y += move_y
 
 # Hauptspielklasse
+clock = pygame.time.Clock()
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_d:
+                # Nächstes Bild bei Drücken der D-Taste
+                current_image_index = (current_image_index + 1) % len(images)
+                screen.blit(images[current_image_index], (x, y))
+    
+    # Bildschirm aktualisieren
+    pygame.display.flip()
+    
+    # Begrenze die Bildrate
+    clock.tick(10)  # 10 FPS, damit die Animation nicht zu schnell ist
 class Game:
     def __init__(self):
         pygame.init()
