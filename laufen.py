@@ -39,7 +39,7 @@ y_pos = HEIGHT // 2 - current_images[0].get_height() // 2
 # Animationseinstellungen
 clock = pygame.time.Clock()
 frame_rate = 15  # Bilder pro Sekunde
-
+frame_rate2 = 10  # Bilder pro Sekunde
 # Hauptschleife
 running = True
 while running:
@@ -59,12 +59,13 @@ while running:
     elif keys[pygame.K_s]:
         current_images = images_down
         current_image_index = (current_image_index + 1) % len(current_images)
-        y_pos += 5  # Bewegt sich 5 Pixel nach unten
+        y_pos += 7.5  # Bewegt sich 5 Pixel nach unten
+        clock.tick(frame_rate2)
     elif keys[pygame.K_w]:
         current_images = images_up
         current_image_index = (current_image_index + 1) % len(current_images)
-        y_pos -= 5  # Bewegt sich 5 Pixel nach unten
-
+        y_pos -= 7.5  # Bewegt sich 5 Pixel nach unten
+        clock.tick(frame_rate2)
     # Bildschirm löschen
     screen.fill((0, 0, 0))
 
