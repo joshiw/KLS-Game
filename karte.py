@@ -35,13 +35,18 @@ corner3 = pygame.image.load('static/images/Texture/test5/tiles/12.png')
 corner3 = pygame.transform.scale(corner3, (64, 64))
 corner4 = pygame.image.load('static/images/Texture/test5/tiles/13.png')
 corner4 = pygame.transform.scale(corner4, (64, 64))
+corner5 = pygame.image.load('static/images/Texture/test5/tiles/21.png')
+corner5 = pygame.transform.scale(corner5, (64, 64))
 
 bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
 barrel = pygame.image.load('static/images/Texture/test5/tiles/barrel.png')
 barrel = pygame.transform.scale(barrel, (32, 32))
 door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
-door = pygame.transform.scale(door, (64, 64))
+door = pygame.transform.scale(door, (69, 69))
+door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png')
+door2 = pygame.transform.scale(door2, (69, 69))
 
+black = (255, 255, 255)
 
 # Titel für Fensterkopf
 pygame.display.set_caption("Breakout in Python")
@@ -52,11 +57,11 @@ clock = pygame.time.Clock()
 
 # Karte für die Mauersteine
 Karte = [
-    [5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 14, 14, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
@@ -147,6 +152,14 @@ while spielaktiv:
             if Karte[y][x] == 11:
                 element_zeichnen(x, y, floor)
                 element_zeichnen(x, y, door)  
+            if Karte[y][x] == 12:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, door2)  
+            if Karte[y][x] == 13:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, corner5)  
+            if Karte[y][x] == 14:
+                element_zeichnen(x, y, black)  
            
 
 
