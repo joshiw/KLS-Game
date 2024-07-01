@@ -26,6 +26,8 @@ wall3 = pygame.image.load('static/images/Texture/test5/tiles/14.png')
 wall3 = pygame.transform.scale(wall3, (64, 64))
 wall4 = pygame.image.load('static/images/Texture/test5/tiles/16.png')
 wall4 = pygame.transform.scale(wall4, (64, 64))
+wall5 = pygame.image.load('static/images/Texture/test5/tiles/17b.png')
+wall5 = pygame.transform.scale(wall5, (64, 64))
 
 corner1 = pygame.image.load('static/images/Texture/test5/tiles/11.png')
 corner1 = pygame.transform.scale(corner1, (64, 64))
@@ -37,6 +39,10 @@ corner4 = pygame.image.load('static/images/Texture/test5/tiles/13.png')
 corner4 = pygame.transform.scale(corner4, (64, 64))
 corner5 = pygame.image.load('static/images/Texture/test5/tiles/21.png')
 corner5 = pygame.transform.scale(corner5, (64, 64))
+corner6 = pygame.image.load('static/images/Texture/test5/tiles/19.png')
+corner6 = pygame.transform.scale(corner6, (64, 64))
+corner7 = pygame.image.load('static/images/Texture/test5/tiles/22.png')
+corner7 = pygame.transform.scale(corner7, (64, 64))
 
 bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
 barrel = pygame.image.load('static/images/Texture/test5/tiles/barrel.png')
@@ -45,8 +51,8 @@ door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
 door = pygame.transform.scale(door, (69, 69))
 door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png')
 door2 = pygame.transform.scale(door2, (69, 69))
-
-black = (255, 255, 255)
+rug = pygame.image.load('static/images/Texture/test5/tiles/rug.png')
+rug = pygame.transform.scale(rug, (69, 69))
 
 # Titel für Fensterkopf
 pygame.display.set_caption("Breakout in Python")
@@ -57,9 +63,9 @@ clock = pygame.time.Clock()
 
 # Karte für die Mauersteine
 Karte = [
-    [5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 14, 14, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 19, 14, 14, 3],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 14, 14, 3],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 11, 12, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
@@ -113,13 +119,13 @@ while spielaktiv:
         if feldpruefung(x-1, y):
             player_pos[0] -= player_speed
     if keys[pygame.K_RIGHT]:
-        if feldpruefung(x+1, y):
+        if feldpruefung(x, y):
             player_pos[0] += player_speed
     if keys[pygame.K_UP]:
         if feldpruefung(x, y-1):
             player_pos[1] -= player_speed
     if keys[pygame.K_DOWN]:
-        if feldpruefung(x, y+1):
+        if feldpruefung(x, y):
             player_pos[1] += player_speed
 
 
@@ -159,8 +165,23 @@ while spielaktiv:
                 element_zeichnen(x, y, floor)
                 element_zeichnen(x, y, corner5)  
             if Karte[y][x] == 14:
-                element_zeichnen(x, y, black)  
-           
+                element_zeichnen(x, y, rug) 
+            if Karte[y][x] == 15:
+                element_zeichnen(x, y, corner6) 
+            if Karte[y][x] == 16:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, wall5)  
+            if Karte[y][x] == 17:
+                element_zeichnen(x, y, wall4)
+                element_zeichnen(x, y, wall)  
+            if Karte[y][x] == 18:
+                element_zeichnen(x, y, corner7) 
+            if Karte[y][x] == 19:
+                element_zeichnen(x, y, wall)
+                element_zeichnen(x, y, corner1)  
+            if Karte[y][x] == 20:
+                element_zeichnen(x, y, wall)
+                element_zeichnen(x, y, wall2)  
 
 
 
