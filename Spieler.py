@@ -5,7 +5,7 @@ import time
 import math
 
 # Konstanten für das Spiel
-WIDTH, HEIGHT = 2000, 600
+WIDTH, HEIGHT = 1280, 720
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -394,10 +394,9 @@ class Game:
         self.settings_image = pygame.image.load(os.path.join(STATIC_DIR, 'SETTINGS.png')).convert_alpha()
         self.settings_image = pygame.transform.scale(self.settings_image, (50, 50))
         self.settings_button = self.settings_image.get_rect(topleft=(10, 10))  # Einstellungs-Knopf
-        self.settings_background = pygame.image.load(os.path.join(STATIC_DIR, 'setting screen.jpg')).convert_alpha()
         self.fullscreen = False
         self.show_shadows = True
-        self.resolutions = [(800, 600), (1280, 720), (1920, 1080), (2000, 600)]
+        self.resolutions = [(1280, 720), (1920, 1080), (2560, 1440), (3840, 2160)]
         self.current_resolution_index = self.resolutions.index((WIDTH, HEIGHT))
 
     def character_selection_screen(self):
@@ -463,7 +462,6 @@ class Game:
         self.show_shadows = not self.show_shadows
 
     def draw_settings_menu(self):
-        self.screen.blit(self.settings_background, (0, 0))
         font = pygame.font.SysFont(None, 45)
         resolution_text = font.render(f"Resolution: {self.resolutions[self.current_resolution_index][0]}x{self.resolutions[self.current_resolution_index][1]}", True, BLACK)
         fullscreen_text = font.render(f"Fullscreen: {'On' if self.fullscreen else 'Off'}", True, BLACK)
