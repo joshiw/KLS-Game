@@ -404,9 +404,10 @@ while True:
     
     # Bildschirm aktualisieren
     pygame.display.flip()
-    
+
     # Begrenze die Bildrate
-    clock.tick(10)  # 10 FPS, damit die Animation nicht zu schnell ist
+    clock.tick(10) # 10 FPS, damit die Animation nicht zu schnell ist
+
 class Game:
     def __init__(self):
         pygame.init()
