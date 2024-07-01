@@ -159,7 +159,7 @@ while spielaktiv:
                 element_zeichnen(x, y, floor)
                 element_zeichnen(x, y, corner5)  
             if Karte[y][x] == 14:
-                element_zeichnen(x, y, black)  
+                element_zeichnen(x, y, floor)  
            
 
 
