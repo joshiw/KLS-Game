@@ -20,6 +20,10 @@ try:
     images_left = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')) for i in range(3, 6)]
     images_down = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')) for i in range(6, 8)]
     images_up = [pygame.image.load(os.path.join(STATIC_DIR, f'resized_arnold_walk{i}.png')) for i in range(9, 11)]
+    images_right = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')) for i in range(3)]
+    images_left = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')) for i in range(3, 6)]
+    images_down = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')) for i in range(6, 8)]
+    images_up = [pygame.image.load(os.path.join(STATIC_DIR, f'resized_hannes_walk{i}.png')) for i in range(9, 11)]
 except pygame.error as e:
     print(f"Fehler beim Laden der Bilder: {e}")
     pygame.quit()
