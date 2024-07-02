@@ -17,6 +17,8 @@ WIDTH, HEIGHT = 30 * MULTIPLIKATOR, 17 * MULTIPLIKATOR
 fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 floor = pygame.image.load('static/images/Texture/test5/tiles/2.png')
 floor = pygame.transform.scale(floor, (64, 64))
+floor2 = pygame.image.load('static/images/Texture/test5/tiles/3.png')
+floor2 = pygame.transform.scale(floor2, (64, 64))
 
 wall = pygame.image.load('static/images/Texture/test5/tiles/17.png')
 wall = pygame.transform.scale(wall, (64, 64))
@@ -45,14 +47,23 @@ corner7 = pygame.image.load('static/images/Texture/test5/tiles/22.png')
 corner7 = pygame.transform.scale(corner7, (64, 64))
 
 bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
-barrel = pygame.image.load('static/images/Texture/test5/tiles/barrel.png')
-barrel = pygame.transform.scale(barrel, (32, 32))
+bookshelf = pygame.transform.scale(bookshelf, (65, 65))
+table2 = pygame.image.load('static/images/Texture/test5/tiles/table2.png')
+table2 = pygame.transform.scale(table2, (65, 65))
+ChairS = pygame.image.load('static/images/Texture/test5/tiles/ChairS.png')
+ChairS = pygame.transform.scale(ChairS, (50, 50))
 door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
 door = pygame.transform.scale(door, (69, 69))
 door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png')
 door2 = pygame.transform.scale(door2, (69, 69))
 rug = pygame.image.load('static/images/Texture/test5/tiles/rug.png')
-rug = pygame.transform.scale(rug, (69, 69))
+rug = pygame.transform.scale(rug, (64, 64))
+board = pygame.image.load('static/images/Texture/test5/tiles/board.png')
+board = pygame.transform.scale(board, (64, 64))
+board2 = pygame.image.load('static/images/Texture/test5/tiles/board2.png')
+board2 = pygame.transform.scale(board2, (64, 64))
+board3 = pygame.image.load('static/images/Texture/test5/tiles/board3.png')
+board3 = pygame.transform.scale(board3, (64, 64))
 
 # Titel für Fensterkopf
 pygame.display.set_caption("Breakout in Python")
@@ -63,20 +74,20 @@ clock = pygame.time.Clock()
 
 # Karte für die Mauersteine
 Karte = [
-    [5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 19, 14, 14, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 14, 14, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 11, 12, 3],
+    [1, 25, 25, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8],
+    [1, 25, 25, 20, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 3],
+    [1, 11, 12, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 22, 0, 14, 14, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 23, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 23, 0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 0, 0, 0, 0, 0, 3],
+    [1, 23, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 21, 0, 14, 14, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7],
@@ -91,14 +102,14 @@ def element_zeichnen(spalte, reihe, art):
     fenster.blit(art, [kor(spalte) + 1, kor(reihe) + 1, kor(1) - 1, kor(1) - 1])
 
 def feldpruefung(x,y):
-    if Karte [y+1][x+1]!=1 and Karte [y+1][x+1]!=2 and Karte [y+1][x+1]!=3 and Karte [y+1][x+1]!=4 and Karte [y+1][x+1]!=5 and Karte [y+1][x+1]!=6 and Karte [y+1][x+1]!=7 and Karte [y+1][x+1]!=8:
+    if Karte [y+1][x+1]!=1 and Karte [y+1][x+1]!=2 and Karte [y+1][x+1]!=3 and Karte [y+1][x+1]!=4 and Karte [y+1][x+1]!=5 and Karte [y+1][x+1]!=6 and Karte [y+1][x+1]!=7 and Karte [y+1][x+1]!=8 and Karte [y+1][x+1]!=10 and Karte [y+1][x+1]!=18 and Karte [y+1][x+1]!=20 and Karte [y+1][x+1]!=21 and Karte [y+1][x+1]!=22 and Karte [y+1][x+1]!=23 and Karte [y+1][x+1]!=9:
         return True
     else:
         return False
     
 # Spielerposition und Geschwindigkeit
-player_pos = [WIDTH // 2, HEIGHT // 2]
-player_speed = 10
+player_pos = [WIDTH // 2, HEIGHT // 2+32]
+player_speed = 64
 
 # Laden des Spielerbildes
 spielerfigur = pygame.image.load("static/images/TopG.png")
@@ -113,19 +124,19 @@ while spielaktiv:
 
     # Spielerbewegung
     keys = pygame.key.get_pressed()
-    x = int(player_pos[0]/MULTIPLIKATOR)
-    y = int(player_pos[1]/MULTIPLIKATOR)
+    x = int(player_pos[0]/MULTIPLIKATOR)-1
+    y = int(player_pos[1]/MULTIPLIKATOR)-1
     if keys[pygame.K_LEFT]:
         if feldpruefung(x-1, y):
             player_pos[0] -= player_speed
     if keys[pygame.K_RIGHT]:
-        if feldpruefung(x, y):
+        if feldpruefung(x+1, y):
             player_pos[0] += player_speed
     if keys[pygame.K_UP]:
         if feldpruefung(x, y-1):
             player_pos[1] -= player_speed
     if keys[pygame.K_DOWN]:
-        if feldpruefung(x, y):
+        if feldpruefung(x, y+1):
             player_pos[1] += player_speed
 
 
@@ -154,7 +165,7 @@ while spielaktiv:
                 element_zeichnen(x, y, bookshelf)  
             if Karte[y][x] == 10:
                 element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, barrel)  
+                element_zeichnen(x, y, table2)  
             if Karte[y][x] == 11:
                 element_zeichnen(x, y, floor)
                 element_zeichnen(x, y, door)  
@@ -177,11 +188,26 @@ while spielaktiv:
             if Karte[y][x] == 18:
                 element_zeichnen(x, y, corner7) 
             if Karte[y][x] == 19:
-                element_zeichnen(x, y, wall)
-                element_zeichnen(x, y, corner1)  
+                element_zeichnen(x, y, wall2)
+                element_zeichnen(x, y, corner2)  
             if Karte[y][x] == 20:
                 element_zeichnen(x, y, wall)
                 element_zeichnen(x, y, wall2)  
+            if Karte[y][x] == 21:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, board)  
+            if Karte[y][x] == 22:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, board2)  
+            if Karte[y][x] == 23:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, board3)  
+            if Karte[y][x] == 24:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, ChairS)  
+            if Karte[y][x] == 25:
+                element_zeichnen(x, y, floor2)   
+
 
 
 
