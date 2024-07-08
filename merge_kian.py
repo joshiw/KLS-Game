@@ -152,6 +152,17 @@ class Character:
                 damage_text.update()
             self.damage_texts = [dt for dt in self.damage_texts if not dt.is_expired()]
             self.replenish_ammo()
+        if dx > 0:
+            self.current_direction = 'right'
+        elif dx < 0:
+            self.current_direction = 'left'
+        elif dy > 0:
+            self.current_direction = 'down'
+        elif dy < 0:
+            self.current_direction = 'up'
+
+        if dx != 0 or dy != 0:
+            self.animate()
 
     def draw(self, screen):
         if self.alive:
@@ -207,6 +218,22 @@ class Character:
                 self.ammo += 1
             self.last_ammo_time = current_time
 
+    def animate(self):
+        self.animation_counter += self.animation_speed
+        if self.animation_counter >= len(self.walk_right_images):
+            self.animation_counter = 0
+        self.animation_index = int(self.animation_counter)
+
+        if self.current_direction == 'right':
+            self.image = self.walk_right_images[self.animation_index]
+        elif self.current_direction == 'left':
+            self.image = self.walk_left_images[self.animation_index]
+        elif self.current_direction == 'down':
+            self.image = self.walk_down_images[self.animation_index]
+        elif self.current_direction == 'up':
+            self.image = self.walk_up_images[self.animation_index]
+
+
 # Schallwellenatacke Hannes
 class SoundWave:
     def __init__(self, x, y):
@@ -254,34 +281,8 @@ class Hannes(Character):
         self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(6, 9)]
         self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
 
-    def update(self, dx, dy):
-        super().update(dx, dy)
-        if dx > 0:
-            self.current_direction = 'right'
-        elif dx < 0:
-            self.current_direction = 'left'
-        elif dy > 0:
-            self.current_direction = 'down'
-        elif dy < 0:
-            self.current_direction = 'up'
-
-        if dx != 0 or dy != 0:
-            self.animate()
-
-    def animate(self):
-        self.animation_counter += self.animation_speed
-        if self.animation_counter >= len(self.walk_right_images):
-            self.animation_counter = 0
-        self.animation_index = int(self.animation_counter)
-
-        if self.current_direction == 'right':
-            self.image = self.walk_right_images[self.animation_index]
-        elif self.current_direction == 'left':
-            self.image = self.walk_left_images[self.animation_index]
-        elif self.current_direction == 'down':
-            self.image = self.walk_down_images[self.animation_index]
-        elif self.current_direction == 'up':
-            self.image = self.walk_up_images[self.animation_index]
+    
+    
     def attack(self):
         current_time = time.time()
         if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
@@ -320,19 +321,7 @@ class Arnold(Character):
         self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(6, 9)]
         self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
 
-    def update(self, dx, dy):
-        super().update(dx, dy)
-        if dx > 0:
-            self.current_direction = 'right'
-        elif dx < 0:
-            self.current_direction = 'left'
-        elif dy > 0:
-            self.current_direction = 'down'
-        elif dy < 0:
-            self.current_direction = 'up'
 
-        if dx != 0 or dy != 0:
-            self.animate()
 
     def animate(self):
         self.animation_counter += self.animation_speed
@@ -626,7 +615,7 @@ class Game:
         font = pygame.font.SysFont(None, 45)
         resolution_text = font.render(f"Resolution: {self.resolutions[self.current_resolution_index][0]}x{self.resolutions[self.current_resolution_index][1]}", True, BLACK)
         fullscreen_text = font.render(f"Fullscreen: {'On' if self.fullscreen else 'Off'}", True, BLACK)
-        shadows_text = font.render(f"Shadows: {'On' if self.show_shadows else 'Off'}", True, BLACK)
+        shadows_text = font.render(f"Shadows: {'Off' if self.show_shadows else 'On'}", True, BLACK)
         self.screen.blit(resolution_text, (WIDTH // 2 - resolution_text.get_width() // 2, HEIGHT // 2 - 60))
         self.screen.blit(fullscreen_text, (WIDTH // 2 - fullscreen_text.get_width() // 2, HEIGHT // 2 + 10))
         self.screen.blit(shadows_text, (WIDTH // 2 - shadows_text.get_width() // 2, HEIGHT // 2 + 80))
