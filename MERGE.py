@@ -403,6 +403,20 @@ class Kian(Character):
             new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
             self.attacks.append(new_attack)
 
+# Charakter Juliana
+class Juliana(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Juliana.png'), health=4, max_ammo=6)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(180)), math.sin(math.radians(180)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
+
 # Boss-Klasse
 class Boss:
     def __init__(self, x, y, image_path):
@@ -513,7 +527,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.character_selected = False
         self.player = None
-        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
+        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'Boss Hr. Van Helden.png'))
         self.show_settings = False
         self.settings_image = pygame.image.load(os.path.join(STATIC_DIR, 'SETTINGS.png')).convert_alpha()
         self.settings_image = pygame.transform.scale(self.settings_image, (50, 50))
@@ -561,7 +575,7 @@ class Game:
 
     def load_game_assets(self):
         self.show_loading_screen()
-        pygame.time.delay(2000)  # Simuliere das Laden von Assets
+        pygame.time.delay(200)
 
     def character_selection_screen(self):
         while not self.character_selected:
@@ -576,15 +590,16 @@ class Game:
             alessandro_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Alessandro.png')).convert_alpha()
             joshi_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Joshi.png')).convert_alpha()
             kian_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Kian.png')).convert_alpha()
-
+            juliana = pygame.image.load(os.path.join(STATIC_DIR, 'Player Juliana.png')).convert_alpha()
             # Positioniere die Charaktere auf dem Bildschirm
             characters = [
-                (hannes_image, "1", Hannes, WIDTH // 7),
-                (leog_image, "2", LeoG, 2 * WIDTH // 7),
-                (arnold_image, "3", Arnold, 3 * WIDTH // 7),
-                (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
-                (joshi_image, "5", Joshi, 5 * WIDTH // 7),
-                (kian_image, "6", Kian, 6 * WIDTH // 7),
+                (hannes_image, "1", Hannes, WIDTH // 8),
+                (leog_image, "2", LeoG, 2 * WIDTH // 8),
+                (arnold_image, "3", Arnold, 3 * WIDTH // 8),
+                (alessandro_image, "4", Alessandro, 4 * WIDTH // 8),
+                (joshi_image, "5", Joshi, 5 * WIDTH // 8),
+                (kian_image, "6", Kian, 6 * WIDTH // 8),
+                (juliana, "7", Juliana, 7 * WIDTH // 8)
             ]
 
             for img, number, _, x_pos in characters:
