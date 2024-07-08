@@ -269,6 +269,46 @@ class LeoG(Character):
 class Arnold(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Arnold.png'), health=6, max_ammo=4)
+        self.load_images()
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
+
+    def load_images(self):
+        self.walk_right_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(3)]
+        self.walk_left_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(3, 6)]
+        self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(6, 9)]
+        self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
+
+    def update(self, dx, dy):
+        super().update(dx, dy)
+        if dx > 0:
+            self.current_direction = 'right'
+        elif dx < 0:
+            self.current_direction = 'left'
+        elif dy > 0:
+            self.current_direction = 'down'
+        elif dy < 0:
+            self.current_direction = 'up'
+
+        if dx != 0 or dy != 0:
+            self.animate()
+
+    def animate(self):
+        self.animation_counter += self.animation_speed
+        if self.animation_counter >= len(self.walk_right_images):
+            self.animation_counter = 0
+        self.animation_index = int(self.animation_counter)
+
+        if self.current_direction == 'right':
+            self.image = self.walk_right_images[self.animation_index]
+        elif self.current_direction == 'left':
+            self.image = self.walk_left_images[self.animation_index]
+        elif self.current_direction == 'down':
+            self.image = self.walk_down_images[self.animation_index]
+        elif self.current_direction == 'up':
+            self.image = self.walk_up_images[self.animation_index]
 
     def attack(self):
         current_time = time.time()
@@ -470,6 +510,17 @@ class Game:
         self.door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png').convert()
         self.door2 = pygame.transform.scale(self.door2, (69, 69))
 
+    def show_loading_screen(self):
+        self.screen.fill(WHITE)
+        font = pygame.font.SysFont(None, 55)
+        text = font.render("Lädt...", True, BLACK)
+        self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2))
+        pygame.display.flip()
+
+    def load_game_assets(self):
+        self.show_loading_screen()
+        pygame.time.delay(2000)  # Simuliere das Laden von Assets
+
     def character_selection_screen(self):
         while not self.character_selected:
             self.screen.fill(WHITE)
@@ -580,6 +631,7 @@ class Game:
                     element_zeichnen(self.screen, x, y, self.floor)
 
     def run(self):
+        self.load_game_assets()
         self.character_selection_screen()
         running = True
         while running:
@@ -621,13 +673,13 @@ class Game:
             self.player.update(player_dx, player_dy)
             self.boss.update([self.player])
 
-            # Partikelkollisionen überprüfen and Partikel entfernen
+            # Partikelkollisionen überprüfen und Partikel entfernen
             for particle in self.boss.particles[:]:
                 if self.player.alive and self.player.rect.colliderect(particle.rect):
                     self.player.take_damage(particle.damage)
                     self.boss.particles.remove(particle)
 
-            # Schallwellen-Kollisionen überprüfen and Boss Schaden zufügen
+            # Schallwellen-Kollisionen überprüfen und Boss Schaden zufügen
             for attack in self.player.attacks[:]:
                 if isinstance(attack, SoundWave) and attack.collide(self.boss.rect):
                     self.boss.take_damage(1)
