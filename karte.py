@@ -102,7 +102,7 @@ Karte2 = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
@@ -164,10 +164,10 @@ while spielaktiv:
 
 
     #Karte wechseln
-    if Karte[y][x] == 11:
+    if Karte[y][x] == 11 or Karte[y][x] == 12:
         Karte = Karte2
         print("Tür erreicht")
-    if Karte[y][x] == 12:
+    if Karte[y][x] == 26:
         Karte = Karte1
         print("Tür erreicht")   
     
@@ -237,7 +237,10 @@ while spielaktiv:
                 element_zeichnen(x, y, floor)
                 element_zeichnen(x, y, ChairS)  
             if Karte[y][x] == 25:
-                element_zeichnen(x, y, floor2)   
+                element_zeichnen(x, y, floor2) 
+            if Karte[y][x] == 26:
+                element_zeichnen(x, y, floor)
+                element_zeichnen(x, y, door)   
 
 
 
