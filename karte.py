@@ -164,10 +164,10 @@ while spielaktiv:
 
 
     #Karte wechseln
-    if Karte[y][x] == 11 or Karte[y][x] == 12:
+    if Karte[y+1][x+1] == 11 or Karte[y+1][x+1] == 12:
         Karte = Karte2
         print("Tür erreicht")
-    if Karte[y][x] == 26:
+    if Karte[y+1][x+1] == 26:
         Karte = Karte1
         print("Tür erreicht")   
     
