@@ -471,7 +471,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.character_selected = False
         self.player = None
-        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
+        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'Boss Hr. Van Helden.png'))
         self.show_settings = False
         self.settings_image = pygame.image.load(os.path.join(STATIC_DIR, 'SETTINGS.png')).convert_alpha()
         self.settings_image = pygame.transform.scale(self.settings_image, (50, 50))
@@ -519,7 +519,7 @@ class Game:
 
     def load_game_assets(self):
         self.show_loading_screen()
-        pygame.time.delay(2000)  # Simuliere das Laden von Assets
+        pygame.time.delay(200)  # Simuliere das Laden von Assets
 
     def character_selection_screen(self):
         while not self.character_selected:
