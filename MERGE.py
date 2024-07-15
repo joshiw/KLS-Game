@@ -22,6 +22,60 @@ pygame.init()
 # unser Multiplikator
 MULTIPLIKATOR = 64
 
+ 
+
+            # Laden der Bilder für die Karte
+fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+floor = pygame.image.load('static/images/Texture/test5/tiles/2.png')
+floor = pygame.transform.scale(floor, (64, 64))
+floor2 = pygame.image.load('static/images/Texture/test5/tiles/3.png')
+floor2 = pygame.transform.scale(floor2, (64, 64))
+ 
+wall = pygame.image.load('static/images/Texture/test5/tiles/17.png')
+wall = pygame.transform.scale(wall, (64, 64))
+wall2 = pygame.image.load('static/images/Texture/test5/tiles/15.png')
+wall2 = pygame.transform.scale(wall2, (64, 64))
+wall3 = pygame.image.load('static/images/Texture/test5/tiles/14.png')
+wall3 = pygame.transform.scale(wall3, (64, 64))
+wall4 = pygame.image.load('static/images/Texture/test5/tiles/16.png')
+wall4 = pygame.transform.scale(wall4, (64, 64))
+wall5 = pygame.image.load('static/images/Texture/test5/tiles/17b.png')
+wall5 = pygame.transform.scale(wall5, (64, 64))
+ 
+corner1 = pygame.image.load('static/images/Texture/test5/tiles/11.png')
+corner1 = pygame.transform.scale(corner1, (64, 64))
+corner2 = pygame.image.load('static/images/Texture/test5/tiles/10.png')
+corner2 = pygame.transform.scale(corner2, (64, 64))
+corner3 = pygame.image.load('static/images/Texture/test5/tiles/12.png')
+corner3 = pygame.transform.scale(corner3, (64, 64))
+corner4 = pygame.image.load('static/images/Texture/test5/tiles/13.png')
+corner4 = pygame.transform.scale(corner4, (64, 64))
+corner5 = pygame.image.load('static/images/Texture/test5/tiles/21.png')
+corner5 = pygame.transform.scale(corner5, (64, 64))
+corner6 = pygame.image.load('static/images/Texture/test5/tiles/19.png')
+corner6 = pygame.transform.scale(corner6, (64, 64))
+corner7 = pygame.image.load('static/images/Texture/test5/tiles/22.png')
+corner7 = pygame.transform.scale(corner7, (64, 64))
+ 
+bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
+bookshelf = pygame.transform.scale(bookshelf, (65, 65))
+table2 = pygame.image.load('static/images/Texture/test5/tiles/table2.png')
+table2 = pygame.transform.scale(table2, (65, 65))
+ChairS = pygame.image.load('static/images/Texture/test5/tiles/ChairS.png')
+ChairS = pygame.transform.scale(ChairS, (50, 50))
+door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
+door = pygame.transform.scale(door, (69, 69))
+door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png')
+door2 = pygame.transform.scale(door2, (69, 69))
+rug = pygame.image.load('static/images/Texture/test5/tiles/rug.png')
+rug = pygame.transform.scale(rug, (64, 64))
+board = pygame.image.load('static/images/Texture/test5/tiles/board.png')
+board = pygame.transform.scale(board, (64, 64))
+board2 = pygame.image.load('static/images/Texture/test5/tiles/board2.png')
+board2 = pygame.transform.scale(board2, (64, 64))
+board3 = pygame.image.load('static/images/Texture/test5/tiles/board3.png')
+board3 = pygame.transform.scale(board3, (64, 64))
+
 # Karte für die Mauersteine aus Spiel 1
 # Karte für die Mauersteine
 Karte = [
@@ -43,6 +97,8 @@ Karte = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7],
 ]
+
+
 
 
 # Korrekturfaktor berechnen
@@ -438,6 +494,27 @@ class Boss:
         self.speed = 1  # Geschwindigkeit des Bosses
         self.damage_texts = []
 
+    def move_towards_nearest_player(self, players):
+        nearest_player = None
+        min_distance = float('inf')
+        for player in players:
+            if player.alive:
+                distance_x = player.rect.centerx - self.rect.centerx
+                distance_y = player.rect.centery - self.rect.centery
+                distance = math.sqrt(distance_x**2 + distance_y**2)
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_player = player
+        if nearest_player:
+            direction_x = nearest_player.rect.centerx - self.rect.centerx
+            direction_y = nearest_player.rect.centery - self.rect.centery
+            distance = math.sqrt(direction_x**2 + direction_y**2)
+            if distance > 0:
+                move_x = (direction_x / distance) * self.speed
+                move_y = (direction_y / distance) * self.speed
+                self.rect.x += move_x
+                self.rect.y += move_y
+
     def update(self, players):
         current_time = time.time()
         if self.alive:
@@ -498,78 +575,7 @@ class Boss:
         particle = Particle(self.rect.centerx, self.rect.centery, direction, damage)
         self.particles.append(particle)
 
-    def move_towards_nearest_player(self, players):
-        nearest_player = None
-        min_distance = float('inf')
-        for player in players:
-            if player.alive:
-                distance_x = player.rect.centerx - self.rect.centerx
-                distance_y = player.rect.centery - self.rect.centery
-                distance = math.sqrt(distance_x**2 + distance_y**2)
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest_player = player
-        if nearest_player:
-            direction_x = nearest_player.rect.centerx - self.rect.centerx
-            direction_y = nearest_player.rect.centery - self.rect.centery
-            distance = math.sqrt(direction_x**2 + direction_y**2)
-            if distance > 0:
-                move_x = (direction_x / distance) * self.speed
-                move_y = (direction_y / distance) * self.speed
-                self.rect.x += move_x
-                self.rect.y += move_y
-
-            # Laden der Bilder für die Karte
-        fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-floor = pygame.image.load('static/images/Texture/test5/tiles/2.png')
-floor = pygame.transform.scale(floor, (64, 64))
-floor2 = pygame.image.load('static/images/Texture/test5/tiles/3.png')
-floor2 = pygame.transform.scale(floor2, (64, 64))
- 
-wall = pygame.image.load('static/images/Texture/test5/tiles/17.png')
-wall = pygame.transform.scale(wall, (64, 64))
-wall2 = pygame.image.load('static/images/Texture/test5/tiles/15.png')
-wall2 = pygame.transform.scale(wall2, (64, 64))
-wall3 = pygame.image.load('static/images/Texture/test5/tiles/14.png')
-wall3 = pygame.transform.scale(wall3, (64, 64))
-wall4 = pygame.image.load('static/images/Texture/test5/tiles/16.png')
-wall4 = pygame.transform.scale(wall4, (64, 64))
-wall5 = pygame.image.load('static/images/Texture/test5/tiles/17b.png')
-wall5 = pygame.transform.scale(wall5, (64, 64))
- 
-corner1 = pygame.image.load('static/images/Texture/test5/tiles/11.png')
-corner1 = pygame.transform.scale(corner1, (64, 64))
-corner2 = pygame.image.load('static/images/Texture/test5/tiles/10.png')
-corner2 = pygame.transform.scale(corner2, (64, 64))
-corner3 = pygame.image.load('static/images/Texture/test5/tiles/12.png')
-corner3 = pygame.transform.scale(corner3, (64, 64))
-corner4 = pygame.image.load('static/images/Texture/test5/tiles/13.png')
-corner4 = pygame.transform.scale(corner4, (64, 64))
-corner5 = pygame.image.load('static/images/Texture/test5/tiles/21.png')
-corner5 = pygame.transform.scale(corner5, (64, 64))
-corner6 = pygame.image.load('static/images/Texture/test5/tiles/19.png')
-corner6 = pygame.transform.scale(corner6, (64, 64))
-corner7 = pygame.image.load('static/images/Texture/test5/tiles/22.png')
-corner7 = pygame.transform.scale(corner7, (64, 64))
- 
-bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
-bookshelf = pygame.transform.scale(bookshelf, (65, 65))
-table2 = pygame.image.load('static/images/Texture/test5/tiles/table2.png')
-table2 = pygame.transform.scale(table2, (65, 65))
-ChairS = pygame.image.load('static/images/Texture/test5/tiles/ChairS.png')
-ChairS = pygame.transform.scale(ChairS, (50, 50))
-door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
-door = pygame.transform.scale(door, (69, 69))
-door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png')
-door2 = pygame.transform.scale(door2, (69, 69))
-rug = pygame.image.load('static/images/Texture/test5/tiles/rug.png')
-rug = pygame.transform.scale(rug, (64, 64))
-board = pygame.image.load('static/images/Texture/test5/tiles/board.png')
-board = pygame.transform.scale(board, (64, 64))
-board2 = pygame.image.load('static/images/Texture/test5/tiles/board2.png')
-board2 = pygame.transform.scale(board2, (64, 64))
-board3 = pygame.image.load('static/images/Texture/test5/tiles/board3.png')
-board3 = pygame.transform.scale(board3, (64, 64))
+   
  
 # Hauptspielklasse
 class Game:
