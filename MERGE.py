@@ -4,6 +4,10 @@ import os
 import time
 import math
 import random
+import logging
+
+# Initialisiere Logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Konstanten für das Spiel
 WIDTH, HEIGHT = 1920, 1080
@@ -22,15 +26,13 @@ pygame.init()
 # unser Multiplikator
 MULTIPLIKATOR = 64
 
- 
-
-            # Laden der Bilder für die Karte
+# Laden der Bilder für die Karte
 fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 floor = pygame.image.load('static/images/Texture/test5/tiles/2.png')
 floor = pygame.transform.scale(floor, (64, 64))
 floor2 = pygame.image.load('static/images/Texture/test5/tiles/3.png')
 floor2 = pygame.transform.scale(floor2, (64, 64))
- 
+
 wall = pygame.image.load('static/images/Texture/test5/tiles/17.png')
 wall = pygame.transform.scale(wall, (64, 64))
 wall2 = pygame.image.load('static/images/Texture/test5/tiles/15.png')
@@ -41,7 +43,7 @@ wall4 = pygame.image.load('static/images/Texture/test5/tiles/16.png')
 wall4 = pygame.transform.scale(wall4, (64, 64))
 wall5 = pygame.image.load('static/images/Texture/test5/tiles/17b.png')
 wall5 = pygame.transform.scale(wall5, (64, 64))
- 
+
 corner1 = pygame.image.load('static/images/Texture/test5/tiles/11.png')
 corner1 = pygame.transform.scale(corner1, (64, 64))
 corner2 = pygame.image.load('static/images/Texture/test5/tiles/10.png')
@@ -56,7 +58,7 @@ corner6 = pygame.image.load('static/images/Texture/test5/tiles/19.png')
 corner6 = pygame.transform.scale(corner6, (64, 64))
 corner7 = pygame.image.load('static/images/Texture/test5/tiles/22.png')
 corner7 = pygame.transform.scale(corner7, (64, 64))
- 
+
 bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
 bookshelf = pygame.transform.scale(bookshelf, (65, 65))
 table2 = pygame.image.load('static/images/Texture/test5/tiles/table2.png')
@@ -98,9 +100,6 @@ Karte = [
     [6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7],
 ]
 
-
-
-
 # Korrekturfaktor berechnen
 def kor(zahl):
     return zahl * MULTIPLIKATOR
@@ -109,8 +108,8 @@ def kor(zahl):
 def element_zeichnen(screen, spalte, reihe, art):
     screen.blit(art, [kor(spalte) + 1, kor(reihe) + 1, kor(1) - 1, kor(1) - 1])
 
-def feldpruefung(x,y):
-    if Karte [y+1][x+1]!=1 and Karte [y+1][x+1]!=2 and Karte [y+1][x+1]!=3 and Karte [y+1][x+1]!=4 and Karte [y+1][x+1]!=5 and Karte [y+1][x+1]!=6 and Karte [y+1][x+1]!=7 and Karte [y+1][x+1]!=8 and Karte [y+1][x+1]!=10 and Karte [y+1][x+1]!=18 and Karte [y+1][x+1]!=20 and Karte [y+1][x+1]!=21 and Karte [y+1][x+1]!=22 and Karte [y+1][x+1]!=23 and Karte [y+1][x+1]!=9:
+def feldpruefung(x, y):
+    if Karte[y + 1][x + 1] != 1 and Karte[y + 1][x + 1] != 2 and Karte[y + 1][x + 1] != 3 and Karte[y + 1][x + 1] != 4 and Karte[y + 1][x + 1] != 5 and Karte[y + 1][x + 1] != 6 and Karte[y + 1][x + 1] != 7 and Karte[y + 1][x + 1] != 8 and Karte[y + 1][x + 1] != 10 and Karte[y + 1][x + 1] != 18 and Karte[y + 1][x + 1] != 20 and Karte[y + 1][x + 1] != 21 and Karte[y + 1][x + 1] != 22 and Karte[y + 1][x + 1] != 23 and Karte[y + 1][x + 1] != 9:
         return True
     else:
         return False
@@ -185,7 +184,7 @@ class Character:
             self.image = pygame.image.load(image_path).convert_alpha()
             self.rect = self.image.get_rect(center=(x, y))
         except pygame.error as e:
-            print(f"Fehler beim Laden des Bildes {image_path}: {e}")
+            logging.error(f"Fehler beim Laden des Bildes {image_path}: {e}")
             self.image = pygame.Surface((50, 50))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
@@ -252,7 +251,7 @@ class Character:
         if self.health <= 0:
             self.health = 0
             self.alive = False
-            print("Spieler besiegt!")
+            logging.info("Spieler besiegt!")
 
     def attack(self):
         pass  # Wird in den Unterklassen definiert
@@ -361,7 +360,6 @@ class LeoG(Character):
             direction = (math.cos(math.radians(0)), math.sin(math.radians(0)))  # Beispielrichtung, kann angepasst werden
             new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
             self.attacks.append(new_attack)
-            
 
 # Charakter Arnold
 class Arnold(Character):
@@ -379,7 +377,6 @@ class Arnold(Character):
         self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(6, 9)]
         self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
 
-    
     def update(self, dx, dy):
         super().update(dx, dy)
         if dx > 0:
@@ -482,7 +479,7 @@ class Boss:
             self.image = pygame.transform.scale(self.original_image, (100, 100))  # Bild skalieren
             self.rect = self.image.get_rect(center=(x, y))
         except pygame.error as e:
-            print(f"Fehler beim Laden des Bildes {image_path}: {e}")
+            logging.error(f"Fehler beim Laden des Bildes {image_path}: {e}")
             self.image = pygame.Surface((10, 10))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
@@ -564,7 +561,7 @@ class Boss:
         if self.health <= 0:
             self.health = 0  # Verhindert, dass die Gesundheit negativ wird
             self.alive = False
-            print("Boss besiegt!")
+            logging.info("Boss besiegt!")
 
     def fire_particle(self, player):
         direction_x = player.rect.centerx - self.rect.centerx
@@ -575,8 +572,6 @@ class Boss:
         particle = Particle(self.rect.centerx, self.rect.centery, direction, damage)
         self.particles.append(particle)
 
-   
- 
 # Hauptspielklasse
 class Game:
     def __init__(self):
@@ -595,7 +590,6 @@ class Game:
         self.show_shadows = True
         self.resolutions = [(1280, 720), (1920, 1080), (2560, 1440), (3840, 2160)]
         self.current_resolution_index = self.resolutions.index((WIDTH, HEIGHT))
-
 
     def show_loading_screen(self):
         self.screen.fill(WHITE)
@@ -649,11 +643,13 @@ class Game:
                     for img, _, char_class, x_pos in characters:
                         rect = img.get_rect(center=(x_pos, HEIGHT // 2))
                         if rect.collidepoint(event.pos):
+                            logging.debug(f"Charakter {char_class.__name__} gewählt")
                             self.player = char_class(200, 200)
                             self.character_selected = True
                 elif event.type == pygame.KEYDOWN:
                     for _, number, char_class, _ in characters:
                         if event.key == getattr(pygame, f'K_{number}'):
+                            logging.debug(f"Charakter {char_class.__name__} mit Tastendruck gewählt")
                             self.player = char_class(200, 200)
                             self.character_selected = True
 
@@ -681,6 +677,7 @@ class Game:
         self.screen.blit(shadows_text, (WIDTH // 2 - shadows_text.get_width() // 2, HEIGHT // 2 + 80))
 
     def draw_map(self):
+        logging.debug("Karte wird gezeichnet")
         for x in range(30):
             for y in range(17):
                 if Karte[y][x] == 0:
@@ -750,7 +747,6 @@ class Game:
                 elif Karte[y][x] == 26:
                     element_zeichnen(self.screen, x, y, floor)
                     element_zeichnen(self.screen, x, y, door)
-
 
     def run(self):
         self.load_game_assets()
