@@ -22,26 +22,84 @@ pygame.init()
 # unser Multiplikator
 MULTIPLIKATOR = 64
 
+ 
+
+            # Laden der Bilder für die Karte
+fenster = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+floor = pygame.image.load('static/images/Texture/test5/tiles/2.png')
+floor = pygame.transform.scale(floor, (64, 64))
+floor2 = pygame.image.load('static/images/Texture/test5/tiles/3.png')
+floor2 = pygame.transform.scale(floor2, (64, 64))
+ 
+wall = pygame.image.load('static/images/Texture/test5/tiles/17.png')
+wall = pygame.transform.scale(wall, (64, 64))
+wall2 = pygame.image.load('static/images/Texture/test5/tiles/15.png')
+wall2 = pygame.transform.scale(wall2, (64, 64))
+wall3 = pygame.image.load('static/images/Texture/test5/tiles/14.png')
+wall3 = pygame.transform.scale(wall3, (64, 64))
+wall4 = pygame.image.load('static/images/Texture/test5/tiles/16.png')
+wall4 = pygame.transform.scale(wall4, (64, 64))
+wall5 = pygame.image.load('static/images/Texture/test5/tiles/17b.png')
+wall5 = pygame.transform.scale(wall5, (64, 64))
+ 
+corner1 = pygame.image.load('static/images/Texture/test5/tiles/11.png')
+corner1 = pygame.transform.scale(corner1, (64, 64))
+corner2 = pygame.image.load('static/images/Texture/test5/tiles/10.png')
+corner2 = pygame.transform.scale(corner2, (64, 64))
+corner3 = pygame.image.load('static/images/Texture/test5/tiles/12.png')
+corner3 = pygame.transform.scale(corner3, (64, 64))
+corner4 = pygame.image.load('static/images/Texture/test5/tiles/13.png')
+corner4 = pygame.transform.scale(corner4, (64, 64))
+corner5 = pygame.image.load('static/images/Texture/test5/tiles/21.png')
+corner5 = pygame.transform.scale(corner5, (64, 64))
+corner6 = pygame.image.load('static/images/Texture/test5/tiles/19.png')
+corner6 = pygame.transform.scale(corner6, (64, 64))
+corner7 = pygame.image.load('static/images/Texture/test5/tiles/22.png')
+corner7 = pygame.transform.scale(corner7, (64, 64))
+ 
+bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png')
+bookshelf = pygame.transform.scale(bookshelf, (65, 65))
+table2 = pygame.image.load('static/images/Texture/test5/tiles/table2.png')
+table2 = pygame.transform.scale(table2, (65, 65))
+ChairS = pygame.image.load('static/images/Texture/test5/tiles/ChairS.png')
+ChairS = pygame.transform.scale(ChairS, (50, 50))
+door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
+door = pygame.transform.scale(door, (69, 69))
+door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png')
+door2 = pygame.transform.scale(door2, (69, 69))
+rug = pygame.image.load('static/images/Texture/test5/tiles/rug.png')
+rug = pygame.transform.scale(rug, (64, 64))
+board = pygame.image.load('static/images/Texture/test5/tiles/board.png')
+board = pygame.transform.scale(board, (64, 64))
+board2 = pygame.image.load('static/images/Texture/test5/tiles/board2.png')
+board2 = pygame.transform.scale(board2, (64, 64))
+board3 = pygame.image.load('static/images/Texture/test5/tiles/board3.png')
+board3 = pygame.transform.scale(board3, (64, 64))
+
 # Karte für die Mauersteine aus Spiel 1
+# Karte für die Mauersteine
 Karte = [
-    [5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 14, 14, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 12, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 25, 25, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 8],
+    [1, 25, 25, 20, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 3],
+    [1, 11, 12, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 22, 0, 14, 14, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 23, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 23, 0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 0, 0, 0, 0, 0, 3],
+    [1, 23, 0, 14, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+    [1, 21, 0, 14, 14, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
+    [1, 0, 0, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 10, 24, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
     [6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7],
 ]
+
+
+
 
 # Korrekturfaktor berechnen
 def kor(zahl):
@@ -51,9 +109,8 @@ def kor(zahl):
 def element_zeichnen(screen, spalte, reihe, art):
     screen.blit(art, [kor(spalte) + 1, kor(reihe) + 1, kor(1) - 1, kor(1) - 1])
 
-# Spielfeldprüfung
-def feldpruefung(x, y):
-    if Karte[y + 1][x + 1] not in {1, 2, 3, 4, 5, 6, 7, 8}:
+def feldpruefung(x,y):
+    if Karte [y+1][x+1]!=1 and Karte [y+1][x+1]!=2 and Karte [y+1][x+1]!=3 and Karte [y+1][x+1]!=4 and Karte [y+1][x+1]!=5 and Karte [y+1][x+1]!=6 and Karte [y+1][x+1]!=7 and Karte [y+1][x+1]!=8 and Karte [y+1][x+1]!=10 and Karte [y+1][x+1]!=18 and Karte [y+1][x+1]!=20 and Karte [y+1][x+1]!=21 and Karte [y+1][x+1]!=22 and Karte [y+1][x+1]!=23 and Karte [y+1][x+1]!=9:
         return True
     else:
         return False
@@ -242,6 +299,46 @@ class SoundWave:
 class Hannes(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Hannes.png'), health=5, max_ammo=3)
+        self.load_images()
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
+
+    def load_images(self):
+        self.walk_right_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(3)]
+        self.walk_left_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(3, 6)]
+        self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(6, 9)]
+        self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
+    
+    def update(self, dx, dy):
+        super().update(dx, dy)
+        if dx > 0:
+            self.current_direction = 'right'
+        elif dx < 0:
+            self.current_direction = 'left'
+        elif dy > 0:
+            self.current_direction = 'down'
+        elif dy < 0:
+            self.current_direction = 'up'
+
+        if dx != 0 or dy != 0:
+            self.animate()
+
+    def animate(self):
+        self.animation_counter += self.animation_speed
+        if self.animation_counter >= len(self.walk_right_images):
+            self.animation_counter = 0
+        self.animation_index = int(self.animation_counter)
+
+        if self.current_direction == 'right':
+            self.image = self.walk_right_images[self.animation_index]
+        elif self.current_direction == 'left':
+            self.image = self.walk_left_images[self.animation_index]
+        elif self.current_direction == 'down':
+            self.image = self.walk_down_images[self.animation_index]
+        elif self.current_direction == 'up':
+            self.image = self.walk_up_images[self.animation_index]
 
     def attack(self):
         current_time = time.time()
@@ -264,6 +361,7 @@ class LeoG(Character):
             direction = (math.cos(math.radians(0)), math.sin(math.radians(0)))  # Beispielrichtung, kann angepasst werden
             new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
             self.attacks.append(new_attack)
+            
 
 # Charakter Arnold
 class Arnold(Character):
@@ -281,6 +379,7 @@ class Arnold(Character):
         self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(6, 9)]
         self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
 
+    
     def update(self, dx, dy):
         super().update(dx, dy)
         if dx > 0:
@@ -361,6 +460,20 @@ class Kian(Character):
             new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
             self.attacks.append(new_attack)
 
+# Charakter Juliana
+class Juliana(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Juliana.png'), health=4, max_ammo=6)
+
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(180)), math.sin(math.radians(180)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
+
 # Boss-Klasse
 class Boss:
     def __init__(self, x, y, image_path):
@@ -380,6 +493,27 @@ class Boss:
         self.last_attack_time = time.time()
         self.speed = 1  # Geschwindigkeit des Bosses
         self.damage_texts = []
+
+    def move_towards_nearest_player(self, players):
+        nearest_player = None
+        min_distance = float('inf')
+        for player in players:
+            if player.alive:
+                distance_x = player.rect.centerx - self.rect.centerx
+                distance_y = player.rect.centery - self.rect.centery
+                distance = math.sqrt(distance_x**2 + distance_y**2)
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_player = player
+        if nearest_player:
+            direction_x = nearest_player.rect.centerx - self.rect.centerx
+            direction_y = nearest_player.rect.centery - self.rect.centery
+            distance = math.sqrt(direction_x**2 + direction_y**2)
+            if distance > 0:
+                move_x = (direction_x / distance) * self.speed
+                move_y = (direction_y / distance) * self.speed
+                self.rect.x += move_x
+                self.rect.y += move_y
 
     def update(self, players):
         current_time = time.time()
@@ -441,27 +575,8 @@ class Boss:
         particle = Particle(self.rect.centerx, self.rect.centery, direction, damage)
         self.particles.append(particle)
 
-    def move_towards_nearest_player(self, players):
-        nearest_player = None
-        min_distance = float('inf')
-        for player in players:
-            if player.alive:
-                distance_x = player.rect.centerx - self.rect.centerx
-                distance_y = player.rect.centery - self.rect.centery
-                distance = math.sqrt(distance_x**2 + distance_y**2)
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest_player = player
-        if nearest_player:
-            direction_x = nearest_player.rect.centerx - self.rect.centerx
-            direction_y = nearest_player.rect.centery - self.rect.centery
-            distance = math.sqrt(direction_x**2 + direction_y**2)
-            if distance > 0:
-                move_x = (direction_x / distance) * self.speed
-                move_y = (direction_y / distance) * self.speed
-                self.rect.x += move_x
-                self.rect.y += move_y
-
+   
+ 
 # Hauptspielklasse
 class Game:
     def __init__(self):
@@ -471,7 +586,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.character_selected = False
         self.player = None
-        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'lehrer1.png'))
+        self.boss = Boss(WIDTH // 2, HEIGHT // 2, os.path.join(STATIC_DIR, 'Boss Hr. Van Helden.png'))
         self.show_settings = False
         self.settings_image = pygame.image.load(os.path.join(STATIC_DIR, 'SETTINGS.png')).convert_alpha()
         self.settings_image = pygame.transform.scale(self.settings_image, (50, 50))
@@ -481,34 +596,6 @@ class Game:
         self.resolutions = [(1280, 720), (1920, 1080), (2560, 1440), (3840, 2160)]
         self.current_resolution_index = self.resolutions.index((WIDTH, HEIGHT))
 
-        # Laden der Bilder für die Karte
-        self.floor = pygame.image.load('static/images/Texture/test5/tiles/2.png').convert()
-        self.floor = pygame.transform.scale(self.floor, (64, 64))
-        self.wall = pygame.image.load('static/images/Texture/test5/tiles/17.png').convert()
-        self.wall = pygame.transform.scale(self.wall, (64, 64))
-        self.wall2 = pygame.image.load('static/images/Texture/test5/tiles/15.png').convert()
-        self.wall2 = pygame.transform.scale(self.wall2, (64, 64))
-        self.wall3 = pygame.image.load('static/images/Texture/test5/tiles/14.png').convert()
-        self.wall3 = pygame.transform.scale(self.wall3, (64, 64))
-        self.wall4 = pygame.image.load('static/images/Texture/test5/tiles/16.png').convert()
-        self.wall4 = pygame.transform.scale(self.wall4, (64, 64))
-        self.corner1 = pygame.image.load('static/images/Texture/test5/tiles/11.png').convert()
-        self.corner1 = pygame.transform.scale(self.corner1, (64, 64))
-        self.corner2 = pygame.image.load('static/images/Texture/test5/tiles/10.png').convert()
-        self.corner2 = pygame.transform.scale(self.corner2, (64, 64))
-        self.corner3 = pygame.image.load('static/images/Texture/test5/tiles/12.png').convert()
-        self.corner3 = pygame.transform.scale(self.corner3, (64, 64))
-        self.corner4 = pygame.image.load('static/images/Texture/test5/tiles/13.png').convert()
-        self.corner4 = pygame.transform.scale(self.corner4, (64, 64))
-        self.corner5 = pygame.image.load('static/images/Texture/test5/tiles/21.png').convert()
-        self.corner5 = pygame.transform.scale(self.corner5, (64, 64))
-        self.bookshelf = pygame.image.load('static/images/Texture/test5/tiles/bookshelf.png').convert()
-        self.barrel = pygame.image.load('static/images/Texture/test5/tiles/barrel.png').convert()
-        self.barrel = pygame.transform.scale(self.barrel, (32, 32))
-        self.door = pygame.image.load('static/images/Texture/test5/tiles/door.png').convert()
-        self.door = pygame.transform.scale(self.door, (69, 69))
-        self.door2 = pygame.image.load('static/images/Texture/test5/tiles/door2.png').convert()
-        self.door2 = pygame.transform.scale(self.door2, (69, 69))
 
     def show_loading_screen(self):
         self.screen.fill(WHITE)
@@ -519,7 +606,7 @@ class Game:
 
     def load_game_assets(self):
         self.show_loading_screen()
-        pygame.time.delay(2000)  # Simuliere das Laden von Assets
+        pygame.time.delay(200)
 
     def character_selection_screen(self):
         while not self.character_selected:
@@ -534,15 +621,16 @@ class Game:
             alessandro_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Alessandro.png')).convert_alpha()
             joshi_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Joshi.png')).convert_alpha()
             kian_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Kian.png')).convert_alpha()
-
+            juliana = pygame.image.load(os.path.join(STATIC_DIR, 'Player Juliana.png')).convert_alpha()
             # Positioniere die Charaktere auf dem Bildschirm
             characters = [
-                (hannes_image, "1", Hannes, WIDTH // 7),
-                (leog_image, "2", LeoG, 2 * WIDTH // 7),
-                (arnold_image, "3", Arnold, 3 * WIDTH // 7),
-                (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
-                (joshi_image, "5", Joshi, 5 * WIDTH // 7),
-                (kian_image, "6", Kian, 6 * WIDTH // 7),
+                (hannes_image, "1", Hannes, WIDTH // 8),
+                (leog_image, "2", LeoG, 2 * WIDTH // 8),
+                (arnold_image, "3", Arnold, 3 * WIDTH // 8),
+                (alessandro_image, "4", Alessandro, 4 * WIDTH // 8),
+                (joshi_image, "5", Joshi, 5 * WIDTH // 8),
+                (kian_image, "6", Kian, 6 * WIDTH // 8),
+                (juliana, "7", Juliana, 7 * WIDTH // 8)
             ]
 
             for img, number, _, x_pos in characters:
@@ -596,39 +684,73 @@ class Game:
         for x in range(30):
             for y in range(17):
                 if Karte[y][x] == 0:
-                    element_zeichnen(self.screen, x, y, self.floor)
+                    element_zeichnen(self.screen, x, y, floor)
                 elif Karte[y][x] == 1:
-                    element_zeichnen(self.screen, x, y, self.wall)
+                    element_zeichnen(self.screen, x, y, wall)
                 elif Karte[y][x] == 2:
-                    element_zeichnen(self.screen, x, y, self.wall3)
+                    element_zeichnen(self.screen, x, y, wall3)
                 elif Karte[y][x] == 3:
-                    element_zeichnen(self.screen, x, y, self.wall2)
+                    element_zeichnen(self.screen, x, y, wall2)
                 elif Karte[y][x] == 4:
-                    element_zeichnen(self.screen, x, y, self.wall4)
+                    element_zeichnen(self.screen, x, y, wall4)
                 elif Karte[y][x] == 5:
-                    element_zeichnen(self.screen, x, y, self.corner2)
+                    element_zeichnen(self.screen, x, y, corner2)
                 elif Karte[y][x] == 6:
-                    element_zeichnen(self.screen, x, y, self.corner3)
+                    element_zeichnen(self.screen, x, y, corner3)
                 elif Karte[y][x] == 7:
-                    element_zeichnen(self.screen, x, y, self.corner4)
+                    element_zeichnen(self.screen, x, y, corner4)
                 elif Karte[y][x] == 8:
-                    element_zeichnen(self.screen, x, y, self.corner1)
+                    element_zeichnen(self.screen, x, y, corner1)
                 elif Karte[y][x] == 9:
-                    element_zeichnen(self.screen, x, y, self.bookshelf)
+                    element_zeichnen(self.screen, x, y, bookshelf)
                 elif Karte[y][x] == 10:
-                    element_zeichnen(self.screen, x, y, self.floor)
-                    element_zeichnen(self.screen, x, y, self.barrel)
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, table2)
                 elif Karte[y][x] == 11:
-                    element_zeichnen(self.screen, x, y, self.floor)
-                    element_zeichnen(self.screen, x, y, self.door)
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, door)
                 elif Karte[y][x] == 12:
-                    element_zeichnen(self.screen, x, y, self.floor)
-                    element_zeichnen(self.screen, x, y, self.door2)
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, door2)
                 elif Karte[y][x] == 13:
-                    element_zeichnen(self.screen, x, y, self.floor)
-                    element_zeichnen(self.screen, x, y, self.corner5)
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, corner5)
                 elif Karte[y][x] == 14:
-                    element_zeichnen(self.screen, x, y, self.floor)
+                    element_zeichnen(self.screen, x, y, rug)
+                elif Karte[y][x] == 15:
+                    element_zeichnen(self.screen, x, y, corner6)
+                elif Karte[y][x] == 16:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, wall5)
+                elif Karte[y][x] == 17:
+                    element_zeichnen(self.screen, x, y, wall4)
+                    element_zeichnen(self.screen, x, y, wall)
+                elif Karte[y][x] == 18:
+                    element_zeichnen(self.screen, x, y, corner7)
+                elif Karte[y][x] == 19:
+                    element_zeichnen(self.screen, x, y, wall2)
+                    element_zeichnen(self.screen, x, y, corner2)
+                elif Karte[y][x] == 20:
+                    element_zeichnen(self.screen, x, y, wall)
+                    element_zeichnen(self.screen, x, y, wall2)
+                elif Karte[y][x] == 21:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, board)
+                elif Karte[y][x] == 22:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, board2)
+                elif Karte[y][x] == 23:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, board3)
+                elif Karte[y][x] == 24:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, ChairS)
+                elif Karte[y][x] == 25:
+                    element_zeichnen(self.screen, x, y, floor2)
+                elif Karte[y][x] == 26:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, door)
+
 
     def run(self):
         self.load_game_assets()
@@ -656,66 +778,66 @@ class Game:
                         elif event.key == pygame.K_s:
                             self.toggle_shadows()
 
-            keys = pygame.key.get_pressed()
-            # Spieler Steuerung (WASD)
-            if self.player.alive:
-                x = int(self.player.rect.centerx / MULTIPLIKATOR)
-                y = int(self.player.rect.centery / MULTIPLIKATOR)
-                if keys[pygame.K_a] and feldpruefung(x - 1, y):
-                    player_dx = -3
-                if keys[pygame.K_d] and feldpruefung(x + 1, y):
-                    player_dx = 3
-                if keys[pygame.K_w] and feldpruefung(x, y - 1):
-                    player_dy = -3
-                if keys[pygame.K_s] and feldpruefung(x, y + 1):
-                    player_dy = 3
+                keys = pygame.key.get_pressed()
+                # Spieler Steuerung (WASD)
+                if self.player.alive:
+                    x = int(self.player.rect.centerx / MULTIPLIKATOR)
+                    y = int(self.player.rect.centery / MULTIPLIKATOR)
+                    if keys[pygame.K_a] and feldpruefung(x - 1, y):
+                        player_dx = -3
+                    if keys[pygame.K_d] and feldpruefung(x + 1, y):
+                        player_dx = 3
+                    if keys[pygame.K_w] and feldpruefung(x, y - 1):
+                        player_dy = -3
+                    if keys[pygame.K_s] and feldpruefung(x, y + 1):
+                        player_dy = 3
 
-            self.player.update(player_dx, player_dy)
-            self.boss.update([self.player])
+                self.player.update(player_dx, player_dy)
+                self.boss.update([self.player])
 
-            # Partikelkollisionen überprüfen und Partikel entfernen
-            for particle in self.boss.particles[:]:
-                if self.player.alive and self.player.rect.colliderect(particle.rect):
-                    self.player.take_damage(particle.damage)
-                    self.boss.particles.remove(particle)
+                # Partikelkollisionen überprüfen und Partikel entfernen
+                for particle in self.boss.particles[:]:
+                    if self.player.alive and self.player.rect.colliderect(particle.rect):
+                        self.player.take_damage(particle.damage)
+                        self.boss.particles.remove(particle)
 
-            # Schallwellen-Kollisionen überprüfen und Boss Schaden zufügen
-            for attack in self.player.attacks[:]:
-                if isinstance(attack, SoundWave) and attack.collide(self.boss.rect):
-                    self.boss.take_damage(1)
-                    attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
-                elif isinstance(attack, LeoGParticle) and attack.rect.colliderect(self.boss.rect):
-                    self.boss.take_damage(2)  # Mehr Schaden durch LeoG's Partikel
-                    self.player.attacks.remove(attack)
+                # Schallwellen-Kollisionen überprüfen und Boss Schaden zufügen
+                for attack in self.player.attacks[:]:
+                    if isinstance(attack, SoundWave) and attack.collide(self.boss.rect):
+                        self.boss.take_damage(1)
+                        attack.active = False  # Deaktiviere die Schallwelle nach dem Treffer
+                    elif isinstance(attack, LeoGParticle) and attack.rect.colliderect(self.boss.rect):
+                        self.boss.take_damage(2)  # Mehr Schaden durch LeoG's Partikel
+                        self.player.attacks.remove(attack)
 
-            # Zeichne Schatten, wenn aktiviert
-            if self.show_shadows:
-                self.boss.draw_shadow(self.screen)
-                self.player.draw_shadow(self.screen)
+                # Zeichne Schatten, wenn aktiviert
+                if self.show_shadows:
+                    self.boss.draw_shadow(self.screen)
+                    self.player.draw_shadow(self.screen)
+                    for attack in self.player.attacks:
+                        attack.draw_shadow(self.screen)
+                    for particle in self.boss.particles:
+                        particle.draw_shadow(self.screen)
+
+                # Zeichne Charaktere und Partikel
+                self.boss.draw(self.screen)
+                self.player.draw(self.screen)
                 for attack in self.player.attacks:
-                    attack.draw_shadow(self.screen)
+                    attack.draw(self.screen)
                 for particle in self.boss.particles:
-                    particle.draw_shadow(self.screen)
+                    particle.draw(self.screen)
 
-            # Zeichne Charaktere und Partikel
-            self.boss.draw(self.screen)
-            self.player.draw(self.screen)
-            for attack in self.player.attacks:
-                attack.draw(self.screen)
-            for particle in self.boss.particles:
-                particle.draw(self.screen)
+                # Zeichne den Einstellungs-Knopf
+                self.screen.blit(self.settings_image, self.settings_button)
 
-            # Zeichne den Einstellungs-Knopf
-            self.screen.blit(self.settings_image, self.settings_button)
+                if self.show_settings:
+                    self.draw_settings_menu()
 
-            if self.show_settings:
-                self.draw_settings_menu()
+                pygame.display.flip()
+                self.clock.tick(60)
 
-            pygame.display.flip()
-            self.clock.tick(60)
-
-        pygame.quit()
-        sys.exit()
+            pygame.quit()
+            sys.exit()
 
 if __name__ == "__main__":
     game = Game()
