@@ -372,7 +372,29 @@ class Joshi(Character):
 class Kian(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Kian.png'), health=4, max_ammo=6)
+        self.load_images('kian')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(180)), math.sin(math.radians(180)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
 
+# Charakter Juliana
+class Juliana(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Juliana.png'), health=4, max_ammo=6)
+        self.load_images('Juliana')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
     def attack(self):
         current_time = time.time()
         if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
@@ -555,7 +577,7 @@ class Game:
             alessandro_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Alessandro.png')).convert_alpha()
             joshi_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Joshi.png')).convert_alpha()
             kian_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Kian.png')).convert_alpha()
-
+            juliana = pygame.image.load(os.path.join(STATIC_DIR, 'Player Juliana.png')).convert_alpha()
             # Positioniere die Charaktere auf dem Bildschirm
             characters = [
                 (hannes_image, "1", Hannes, WIDTH // 7),
@@ -564,6 +586,7 @@ class Game:
                 (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
                 (joshi_image, "5", Joshi, 5 * WIDTH // 7),
                 (kian_image, "6", Kian, 6 * WIDTH // 7),
+                (juliana, "7", Juliana, 7 * WIDTH // 8)
             ]
 
             for img, number, _, x_pos in characters:
