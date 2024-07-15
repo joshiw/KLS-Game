@@ -291,7 +291,7 @@ class Boss:
             self.image = pygame.Surface((10, 10))
             self.image.fill((255, 0, 0))
             self.rect = self.image.get_rect(center=(x, y))
-        self.health = 300
+        self.health = 7
         self.max_health = self.health
         self.alive = True
         self.particles = []
