@@ -682,74 +682,76 @@ class Game:
 
     def draw_map(self):
         for x in range(30):
-         for y in range(17):
-            if Karte[y][x] == 0:
-                element_zeichnen(x, y, floor)
-            if Karte[y][x] == 1:
-                element_zeichnen(x, y, wall)
-            if Karte[y][x] == 2:
-                element_zeichnen(x, y, wall3)
-            if Karte[y][x] == 3:
-                element_zeichnen(x, y, wall2)
-            if Karte[y][x] == 4:
-                element_zeichnen(x, y, wall4)    
-            if Karte[y][x] == 5:
-                element_zeichnen(x, y, corner2)
-            if Karte[y][x] == 6:
-                element_zeichnen(x, y, corner3)  
-            if Karte[y][x] == 7:
-                element_zeichnen(x, y, corner4)  
-            if Karte[y][x] == 8:
-                element_zeichnen(x, y, corner1)
-            if Karte[y][x] == 9:
-                element_zeichnen(x, y, bookshelf)  
-            if Karte[y][x] == 10:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, table2)  
-            if Karte[y][x] == 11:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, door)  
-            if Karte[y][x] == 12:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, door2)  
-            if Karte[y][x] == 13:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, corner5)  
-            if Karte[y][x] == 14:
-                element_zeichnen(x, y, rug)
-            if Karte[y][x] == 15:
-                element_zeichnen(x, y, corner6)
-            if Karte[y][x] == 16:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, wall5)  
-            if Karte[y][x] == 17:
-                element_zeichnen(x, y, wall4)
-                element_zeichnen(x, y, wall)  
-            if Karte[y][x] == 18:
-                element_zeichnen(x, y, corner7)
-            if Karte[y][x] == 19:
-                element_zeichnen(x, y, wall2)
-                element_zeichnen(x, y, corner2)  
-            if Karte[y][x] == 20:
-                element_zeichnen(x, y, wall)
-                element_zeichnen(x, y, wall2)  
-            if Karte[y][x] == 21:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, board)  
-            if Karte[y][x] == 22:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, board2)  
-            if Karte[y][x] == 23:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, board3)  
-            if Karte[y][x] == 24:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, ChairS)  
-            if Karte[y][x] == 25:
-                element_zeichnen(x, y, floor2)
-            if Karte[y][x] == 26:
-                element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, door)  
+            for y in range(17):
+                if Karte[y][x] == 0:
+                    element_zeichnen(self.screen, x, y, floor)
+                elif Karte[y][x] == 1:
+                    element_zeichnen(self.screen, x, y, wall)
+                elif Karte[y][x] == 2:
+                    element_zeichnen(self.screen, x, y, wall3)
+                elif Karte[y][x] == 3:
+                    element_zeichnen(self.screen, x, y, wall2)
+                elif Karte[y][x] == 4:
+                    element_zeichnen(self.screen, x, y, wall4)
+                elif Karte[y][x] == 5:
+                    element_zeichnen(self.screen, x, y, corner2)
+                elif Karte[y][x] == 6:
+                    element_zeichnen(self.screen, x, y, corner3)
+                elif Karte[y][x] == 7:
+                    element_zeichnen(self.screen, x, y, corner4)
+                elif Karte[y][x] == 8:
+                    element_zeichnen(self.screen, x, y, corner1)
+                elif Karte[y][x] == 9:
+                    element_zeichnen(self.screen, x, y, bookshelf)
+                elif Karte[y][x] == 10:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, table2)
+                elif Karte[y][x] == 11:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, door)
+                elif Karte[y][x] == 12:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, door2)
+                elif Karte[y][x] == 13:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, corner5)
+                elif Karte[y][x] == 14:
+                    element_zeichnen(self.screen, x, y, rug)
+                elif Karte[y][x] == 15:
+                    element_zeichnen(self.screen, x, y, corner6)
+                elif Karte[y][x] == 16:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, wall5)
+                elif Karte[y][x] == 17:
+                    element_zeichnen(self.screen, x, y, wall4)
+                    element_zeichnen(self.screen, x, y, wall)
+                elif Karte[y][x] == 18:
+                    element_zeichnen(self.screen, x, y, corner7)
+                elif Karte[y][x] == 19:
+                    element_zeichnen(self.screen, x, y, wall2)
+                    element_zeichnen(self.screen, x, y, corner2)
+                elif Karte[y][x] == 20:
+                    element_zeichnen(self.screen, x, y, wall)
+                    element_zeichnen(self.screen, x, y, wall2)
+                elif Karte[y][x] == 21:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, board)
+                elif Karte[y][x] == 22:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, board2)
+                elif Karte[y][x] == 23:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, board3)
+                elif Karte[y][x] == 24:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, ChairS)
+                elif Karte[y][x] == 25:
+                    element_zeichnen(self.screen, x, y, floor2)
+                elif Karte[y][x] == 26:
+                    element_zeichnen(self.screen, x, y, floor)
+                    element_zeichnen(self.screen, x, y, door)
+
+
     def run(self):
         self.load_game_assets()
         self.character_selection_screen()
