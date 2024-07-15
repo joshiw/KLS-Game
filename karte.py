@@ -52,6 +52,8 @@ table = pygame.image.load('static/images/Texture/test5/tiles/table.png')
 table = pygame.transform.scale(table, (65, 65))
 table2 = pygame.image.load('static/images/Texture/test5/tiles/table2.png')
 table2 = pygame.transform.scale(table2, (65, 65))
+Chair = pygame.image.load('static/images/Texture/test5/tiles/Chair.png')
+Chair = pygame.transform.scale(Chair, (50, 50))
 ChairS = pygame.image.load('static/images/Texture/test5/tiles/ChairS.png')
 ChairS = pygame.transform.scale(ChairS, (50, 50))
 door = pygame.image.load('static/images/Texture/test5/tiles/door.png')
@@ -183,20 +185,28 @@ while spielaktiv:
             if Karte[y][x] == 0:
                 element_zeichnen(x, y, floor)
             if Karte[y][x] == 1:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, wall)
             if Karte[y][x] == 2:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, wall3)
             if Karte[y][x] == 3:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, wall2)
             if Karte[y][x] == 4:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, wall4)    
             if Karte[y][x] == 5:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, corner2)
             if Karte[y][x] == 6:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, corner3)   
             if Karte[y][x] == 7:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, corner4)  
             if Karte[y][x] == 8:
+                element_zeichnen(x, y, black)
                 element_zeichnen(x, y, corner1)
             if Karte[y][x] == 9:
                 element_zeichnen(x, y, bookshelf)  
@@ -256,11 +266,10 @@ while spielaktiv:
             #Neues Bild für Stühle, die nach oben zeigen
             if Karte[y][x] == 29:
                 element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, ChairS)
-            #Neues Bild für Stühle, die nach unten zeigen
+                element_zeichnen(x, y, Chair)
             if Karte[y][x] == 30:
                 element_zeichnen(x, y, floor)
-                element_zeichnen(x, y, ChairS)
+                element_zeichnen(x, y, Chair)
 
 
 
