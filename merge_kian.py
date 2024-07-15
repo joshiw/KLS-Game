@@ -217,6 +217,11 @@ class Character:
             if self.ammo < self.max_ammo:
                 self.ammo += 1
             self.last_ammo_time = current_time
+    def load_images(self,character_name):
+        self.walk_right_images = [pygame.image.load(os.path.join(STATIC_DIR, f'{character_name}_walk{i}.png')).convert_alpha() for i in range(3)]
+        self.walk_left_images = [pygame.image.load(os.path.join(STATIC_DIR, f'{character_name}_walk{i}.png')).convert_alpha() for i in range(3, 6)]
+        self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'{character_name}_walk{i}.png')).convert_alpha() for i in range(6, 9)]
+        self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'{character_name}_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
 
     def animate(self):
         self.animation_counter += self.animation_speed
@@ -269,17 +274,13 @@ class SoundWave:
 class Hannes(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Hannes.png'), health=5, max_ammo=3)
-        self.load_images()
+        self.load_images('hannes')
         self.animation_index = 0
         self.animation_speed = 0.1
         self.animation_counter = 0
         self.current_direction = 'down'
 
-    def load_images(self):
-        self.walk_right_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(3)]
-        self.walk_left_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(3, 6)]
-        self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(6, 9)]
-        self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
+    
 
     
     
@@ -295,7 +296,11 @@ class Hannes(Character):
 class LeoG(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player LeoG.png'), health=7, max_ammo=3)
-
+        self.load_images('LeoG')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
     def attack(self):
         current_time = time.time()
         if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
@@ -309,34 +314,13 @@ class LeoG(Character):
 class Arnold(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Arnold.png'), health=6, max_ammo=4)
-        self.load_images()
+        self.load_images('arnold')
         self.animation_index = 0
         self.animation_speed = 0.1
         self.animation_counter = 0
         self.current_direction = 'down'
 
-    def load_images(self):
-        self.walk_right_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(3)]
-        self.walk_left_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(3, 6)]
-        self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha() for i in range(6, 9)]
-        self.walk_up_images = [pygame.transform.scale(pygame.image.load(os.path.join(STATIC_DIR, f'arnold_walk{i}.png')).convert_alpha(), (64, 64)) for i in range(9, 12)]
-
-
-
-    def animate(self):
-        self.animation_counter += self.animation_speed
-        if self.animation_counter >= len(self.walk_right_images):
-            self.animation_counter = 0
-        self.animation_index = int(self.animation_counter)
-
-        if self.current_direction == 'right':
-            self.image = self.walk_right_images[self.animation_index]
-        elif self.current_direction == 'left':
-            self.image = self.walk_left_images[self.animation_index]
-        elif self.current_direction == 'down':
-            self.image = self.walk_down_images[self.animation_index]
-        elif self.current_direction == 'up':
-            self.image = self.walk_up_images[self.animation_index]
+   
 
     def attack(self):
         current_time = time.time()
@@ -351,6 +335,11 @@ class Arnold(Character):
 class Alessandro(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Alessandro.png'), health=8, max_ammo=2)
+        self.load_images('Alessandro')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
 
     def attack(self):
         current_time = time.time()
@@ -365,7 +354,11 @@ class Alessandro(Character):
 class Joshi(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Joshi.png'), health=5, max_ammo=5)
-
+        self.load_images('Joshi')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
     def attack(self):
         current_time = time.time()
         if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
@@ -379,7 +372,29 @@ class Joshi(Character):
 class Kian(Character):
     def __init__(self, x, y):
         super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Kian.png'), health=4, max_ammo=6)
+        self.load_images('kian')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
+    def attack(self):
+        current_time = time.time()
+        if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
+            self.ammo -= 1
+            self.last_shot_time = current_time
+            direction = (math.cos(math.radians(180)), math.sin(math.radians(180)))  # Beispielrichtung, kann angepasst werden
+            new_attack = LeoGParticle(self.rect.centerx, self.rect.centery, direction)
+            self.attacks.append(new_attack)
 
+# Charakter Juliana
+class Juliana(Character):
+    def __init__(self, x, y):
+        super().__init__(x, y, os.path.join(STATIC_DIR, 'Player Juliana.png'), health=4, max_ammo=6)
+        self.load_images('Juliana')
+        self.animation_index = 0
+        self.animation_speed = 0.1
+        self.animation_counter = 0
+        self.current_direction = 'down'
     def attack(self):
         current_time = time.time()
         if self.alive and self.ammo > 0 and current_time - self.last_shot_time >= 0.5:  # Mindestabstand zwischen Schüssen
@@ -562,7 +577,7 @@ class Game:
             alessandro_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Alessandro.png')).convert_alpha()
             joshi_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Joshi.png')).convert_alpha()
             kian_image = pygame.image.load(os.path.join(STATIC_DIR, 'Player Kian.png')).convert_alpha()
-
+            juliana = pygame.image.load(os.path.join(STATIC_DIR, 'Player Juliana.png')).convert_alpha()
             # Positioniere die Charaktere auf dem Bildschirm
             characters = [
                 (hannes_image, "1", Hannes, WIDTH // 7),
@@ -571,6 +586,7 @@ class Game:
                 (alessandro_image, "4", Alessandro, 4 * WIDTH // 7),
                 (joshi_image, "5", Joshi, 5 * WIDTH // 7),
                 (kian_image, "6", Kian, 6 * WIDTH // 7),
+                (juliana, "7", Juliana, 7 * WIDTH // 8)
             ]
 
             for img, number, _, x_pos in characters:
