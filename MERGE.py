@@ -305,6 +305,7 @@ class Hannes(Character):
         self.current_direction = 'down'
 
     def load_images(self):
+        logging.debug(f"Lade Bilder für {self.__class__.__name__}")
         self.walk_right_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(3)]
         self.walk_left_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(3, 6)]
         self.walk_down_images = [pygame.image.load(os.path.join(STATIC_DIR, f'hannes_walk{i}.png')).convert_alpha() for i in range(6, 9)]
@@ -678,75 +679,49 @@ class Game:
 
     def draw_map(self):
         logging.debug("Karte wird gezeichnet")
-        for x in range(30):
-            for y in range(17):
-                if Karte[y][x] == 0:
-                    element_zeichnen(self.screen, x, y, floor)
-                elif Karte[y][x] == 1:
-                    element_zeichnen(self.screen, x, y, wall)
-                elif Karte[y][x] == 2:
-                    element_zeichnen(self.screen, x, y, wall3)
-                elif Karte[y][x] == 3:
-                    element_zeichnen(self.screen, x, y, wall2)
-                elif Karte[y][x] == 4:
-                    element_zeichnen(self.screen, x, y, wall4)
-                elif Karte[y][x] == 5:
-                    element_zeichnen(self.screen, x, y, corner2)
-                elif Karte[y][x] == 6:
-                    element_zeichnen(self.screen, x, y, corner3)
-                elif Karte[y][x] == 7:
-                    element_zeichnen(self.screen, x, y, corner4)
-                elif Karte[y][x] == 8:
-                    element_zeichnen(self.screen, x, y, corner1)
-                elif Karte[y][x] == 9:
-                    element_zeichnen(self.screen, x, y, bookshelf)
-                elif Karte[y][x] == 10:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, table2)
-                elif Karte[y][x] == 11:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, door)
-                elif Karte[y][x] == 12:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, door2)
-                elif Karte[y][x] == 13:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, corner5)
-                elif Karte[y][x] == 14:
-                    element_zeichnen(self.screen, x, y, rug)
-                elif Karte[y][x] == 15:
-                    element_zeichnen(self.screen, x, y, corner6)
-                elif Karte[y][x] == 16:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, wall5)
-                elif Karte[y][x] == 17:
-                    element_zeichnen(self.screen, x, y, wall4)
-                    element_zeichnen(self.screen, x, y, wall)
-                elif Karte[y][x] == 18:
-                    element_zeichnen(self.screen, x, y, corner7)
-                elif Karte[y][x] == 19:
-                    element_zeichnen(self.screen, x, y, wall2)
-                    element_zeichnen(self.screen, x, y, corner2)
-                elif Karte[y][x] == 20:
-                    element_zeichnen(self.screen, x, y, wall)
-                    element_zeichnen(self.screen, x, y, wall2)
-                elif Karte[y][x] == 21:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, board)
-                elif Karte[y][x] == 22:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, board2)
-                elif Karte[y][x] == 23:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, board3)
-                elif Karte[y][x] == 24:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, ChairS)
-                elif Karte[y][x] == 25:
-                    element_zeichnen(self.screen, x, y, floor2)
-                elif Karte[y][x] == 26:
-                    element_zeichnen(self.screen, x, y, floor)
-                    element_zeichnen(self.screen, x, y, door)
+        
+        tile_mapping = {
+            0: floor,
+            1: wall,
+            2: wall3,
+            3: wall2,
+            4: wall4,
+            5: corner2,
+            6: corner3,
+            7: corner4,
+            8: corner1,
+            9: bookshelf,
+            10: [floor, table2],
+            11: [floor, door],
+            12: [floor, door2],
+            13: [floor, corner5],
+            14: rug,
+            15: corner6,
+            16: [floor, wall5],
+            17: [wall4, wall],
+            18: corner7,
+            19: [wall2, corner2],
+            20: [wall, wall2],
+            21: [floor, board],
+            22: [floor, board2],
+            23: [floor, board3],
+            24: [floor, ChairS],
+            25: floor2,
+            26: [floor, door],
+        }
+        
+        for y in range(17):
+            for x in range(30):
+                tile = Karte[y][x]
+                elements = tile_mapping.get(tile)
+                if elements:
+                    if isinstance(elements, list):
+                        for element in elements:
+                            element_zeichnen(self.screen, x, y, element)
+                    else:
+                        element_zeichnen(self.screen, x, y, elements)
+
+
 
     def run(self):
         self.load_game_assets()
@@ -832,8 +807,8 @@ class Game:
                 pygame.display.flip()
                 self.clock.tick(60)
 
-            pygame.quit()
-            sys.exit()
+        pygame.quit()
+        sys.exit()
 
 if __name__ == "__main__":
     game = Game()
